@@ -1,0 +1,25 @@
+{
+  "name": "npmdocker",
+  "version": "1.0.0",
+  "description": "develop modules cross platform by using docker",
+  "main": "dist/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "(npmts)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/pushrocks/npmdocker.git"
+  },
+  "keywords": [
+    "docker"
+  ],
+  "author": "Lossless GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/pushrocks/npmdocker/issues"
+  },
+  "homepage": "https://gitlab.com/pushrocks/npmdocker#README"
+}
