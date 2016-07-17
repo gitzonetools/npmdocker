@@ -28,6 +28,7 @@
     "typings-test": "^1.0.1"
   },
   "dependencies": {
+    "@types/q": "*",
     "beautylog": "^5.0.13",
     "q": "^1.4.1",
     "rxjs": "^5.0.0-beta.10",
