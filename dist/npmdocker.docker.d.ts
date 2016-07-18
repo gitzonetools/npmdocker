@@ -5,3 +5,4 @@ import * as plugins from "./npmdocker.plugins";
  */
 export declare let checkDocker: () => plugins.q.Promise<{}>;
 export declare let makeDockerReady: () => void;
+export declare let run: (configArg: any) => plugins.q.Promise<{}>;
