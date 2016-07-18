@@ -1,7 +1,12 @@
 import * as plugins from "./npmdocker.plugins";
 import * as paths from "./npmdocker.paths";
 
-let config = plugins.npmextra.dataFor({
+export interface IConfig {
+    baseImage:string;
+    command:string;
+}
+
+let config:IConfig = plugins.npmextra.dataFor({
     toolName:"npmdocker",
     defaultSettings: {},
     cwd: ""

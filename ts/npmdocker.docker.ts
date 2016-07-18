@@ -1,13 +1,16 @@
 import * as plugins from "./npmdocker.plugins";
 import * as paths from "./npmdocker.paths";
+import * as snippets from "./npmdocker.snippets";
+
+let config;
 
 /**
  * check if docker is available
  */
-let checkDocker = (configArg) => {
+let checkDocker = () => {
     let done = plugins.q.defer();
     if(plugins.shelljs.which("docker")){
-        done.resolve(configArg);
+        done.resolve();
     } else {
         done.reject(new Error("docker not found on this machine"));
     }
@@ -19,6 +22,10 @@ let checkDocker = (configArg) => {
  */
 let buildDockerFile = () => {
     let done = plugins.q.defer();
+    let dockerfile = snippets.dockerfileSnippet({
+        baseImage:config.baseImage,
+        command:config.command
+    });
     return done.promise
 };
 
@@ -52,12 +59,15 @@ let deleteDockerImage = () => {
 
 export let run = (configArg) => {
     let done = plugins.q.defer();
-    checkDocker(configArg)
+    config = configArg;
+    checkDocker()
         .then(buildDockerFile)
         .then(buildDockerImage)
         .then(runDockerImage)
         .then(deleteDockerContainter)
         .then(deleteDockerImage)
-        .then(done.resolve)
+        .then(() => {
+            done.resolve(configArg);
+        })
     return done.promise;
 }

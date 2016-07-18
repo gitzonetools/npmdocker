@@ -5,9 +5,17 @@ export interface IDockerfileSnippet {
     command:string;
 }
 
-export let dockerfileSnippet = (optionsArg:IDockerfileSnippet) => {
+export let dockerfileSnippet = (optionsArg:IDockerfileSnippet):string => {
+    let commandArray = optionsArg.command.split(" ");
+    let commandString:string = "";
+    for(let stringItem of commandArray){
+        if(!(commandString == "")){
+            commandString = commandString + ",";
+        }
+        commandString = commandString + '"' + stringItem + '"';
+    }
     return `
         FROM ${optionsArg.baseImage}
-
+        cmd[${commandString}];
     `
 }
