@@ -3,5 +3,5 @@ export import beautylog = require("beautylog");
 export import npmextra = require("npmextra");
 export import path = require("path");
 export import q = require("q");
-export let shelljs = require("shelljs");
+export declare let shelljs: any;
 export import smartfile = require("smartfile");
