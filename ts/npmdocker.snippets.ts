@@ -16,6 +16,8 @@ export let dockerfileSnippet = (optionsArg:IDockerfileSnippet):string => {
     }
     return `
         FROM ${optionsArg.baseImage}
+        RUN mkdir /workspace
+        WORKDIR /workspace
         cmd[${commandString}];
     `
 }

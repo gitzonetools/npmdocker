@@ -26,6 +26,7 @@ let buildDockerFile = () => {
         baseImage:config.baseImage,
         command:config.command
     });
+    plugins.smartfile.memory.toFsSync(JSON.stringify(dockerfile),paths.dockerfile);
     return done.promise
 };
 
@@ -34,6 +35,8 @@ let buildDockerFile = () => {
  */
 let buildDockerImage = () => {
     let done = plugins.q.defer();
+    plugins.shelljs(`docker build -f ${paths.dockerfile} -v ${paths.cwd}:/workdir ${paths.assets}`);
+    done.resolve();
     return done.promise
 };
 
