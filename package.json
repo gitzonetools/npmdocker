@@ -1,6 +1,6 @@
 {
   "name": "npmdocker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "develop npm modules cross platform with docker",
   "main": "dist/index.js",
   "bin": {
