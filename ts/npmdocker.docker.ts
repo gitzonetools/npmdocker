@@ -3,7 +3,8 @@ import * as paths from "./npmdocker.paths";
 import * as snippets from "./npmdocker.snippets";
 
 let config;
-
+let imageTag = "npmdocker-temp-image"
+let containerName = "npmdocker-temp-container"
 /**
  * check if docker is available
  */
@@ -35,7 +36,8 @@ let buildDockerFile = () => {
  */
 let buildDockerImage = () => {
     let done = plugins.q.defer();
-    plugins.shelljs(`docker build -f ${paths.dockerfile} -v ${paths.cwd}:/workdir ${paths.assets}`);
+    plugins.shelljs.exec(`docker pull ${config.baseImage}`); // first pull latest version of baseImage
+    plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -v ${paths.cwd}:/workdir -t ${imageTag} ${paths.assets}`);
     done.resolve();
     return done.promise
 };
@@ -45,6 +47,7 @@ let buildDockerImage = () => {
  */
 let runDockerImage = () => {
     let done = plugins.q.defer();
+    plugins.shelljs.exec(`docker run --name ${containerName} ${imageTag}`);
     return done.promise
 };
 
