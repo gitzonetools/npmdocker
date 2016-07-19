@@ -2,17 +2,20 @@ import * as plugins from "./npmdocker.plugins";
 import * as paths from "./npmdocker.paths";
 import * as snippets from "./npmdocker.snippets";
 
+import {npmdockerOra} from "./npmdocker.promisechain";
+
 let config;
 let dockerData = {
     imageTag: "npmdocker-temp-image:latest",
-    containerName: "npmdocker-temp-container",
-    exitCode:0
+    containerName: "npmdocker-temp-container"
 };
+
 /**
  * check if docker is available
  */
 let checkDocker = () => {
     let done = plugins.q.defer();
+    npmdockerOra.text("checking docker...");
     if(plugins.shelljs.which("docker")){
         plugins.beautylog.ok("Docker found!")
         done.resolve();
@@ -27,6 +30,7 @@ let checkDocker = () => {
  */
 let buildDockerFile = () => {
     let done = plugins.q.defer();
+    npmdockerOra.text("building Dockerfile...");
     let dockerfile:string = snippets.dockerfileSnippet({
         baseImage:config.baseImage,
         command:config.command
@@ -44,16 +48,18 @@ let buildDockerFile = () => {
  */
 let buildDockerImage = () => {
     let done = plugins.q.defer();
-    plugins.beautylog.log("pulling latest image...");
+    npmdockerOra.text("pulling latest base image from registry...");
     plugins.shelljs.exec(`docker pull ${config.baseImage}`,{
         silent:true
-    }); // first pull latest version of baseImage
-    plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,{
-        silent:true
     },() => {
-        plugins.beautylog.ok("Dockerimage built!")
-        done.resolve();
-    });
+        npmdockerOra.text("building Dockerimage...");
+        plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,{
+            silent:true
+        },() => {
+            plugins.beautylog.ok("Dockerimage built!")
+            done.resolve();
+        });
+    }); // first pull latest version of baseImage
     return done.promise
 };
 
@@ -62,8 +68,9 @@ let buildDockerImage = () => {
  */
 let runDockerImage = () => {
     let done = plugins.q.defer();
-    plugins.beautylog.info("Now starting Container!");
-    dockerData.exitCode = plugins.shelljs.exec(`docker run  -v ${paths.cwd}:/workspace --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
+    npmdockerOra.text("starting Container...");
+    npmdockerOra.end();
+    config.exitCode = plugins.shelljs.exec(`docker run  -v ${paths.cwd}:/workspace --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
     done.resolve();
     return done.promise;
 };
@@ -101,7 +108,7 @@ export let run = (configArg) => {
         .then(deleteDockerContainter)
         .then(deleteDockerImage)
         .then(() => {
-            done.resolve(configArg);
+            done.resolve(config);
         })
     return done.promise;
 }

@@ -6,7 +6,10 @@ import * as ConfigModule from "./npmdocker.config";
 promisechain.run()
     .then((configArg:ConfigModule.IConfig) => {
         if(configArg.exitCode == 0){
-            plugins.beautylog.success("Allright test in docker ran through");
+            plugins.beautylog.success("container ended all right!");
+        } else {
+            plugins.beautylog.error("container ended with error!");
+            process.exit(1);
         }
     });
 
