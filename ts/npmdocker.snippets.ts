@@ -6,18 +6,19 @@ export interface IDockerfileSnippet {
 }
 
 export let dockerfileSnippet = (optionsArg:IDockerfileSnippet):string => {
-    let commandArray = optionsArg.command.split(" ");
+    let commandArray = optionsArg.command.split(/\s/);
     let commandString:string = "";
     for(let stringItem of commandArray){
         if(!(commandString == "")){
             commandString = commandString + ",";
         }
         commandString = commandString + '"' + stringItem + '"';
-    }
-    return `
+    };
+    return plugins.smartstring.indent.normalize(`
         FROM ${optionsArg.baseImage}
         RUN mkdir /workspace
         WORKDIR /workspace
-        cmd[${commandString}];
-    `
+        ENV CI=true
+        CMD [${commandString}];
+    `);
 }

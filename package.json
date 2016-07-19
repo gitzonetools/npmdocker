@@ -7,7 +7,11 @@
     "test": "test"
   },
   "scripts": {
-    "test": "(npmts)"
+    "test": "(npm run clean && npm run compile && npm run setupCheck && npm run check)",
+    "clean": "(rm -rf test/)",
+    "compile": "(npmts --notest)",
+    "setupCheck": "(git clone https://gitlab.com/sandboxzone/sandbox-npmts.git test/)",
+    "check": "(cd test/ && node ../dist/index.js)"
   },
   "repository": {
     "type": "git",
@@ -29,12 +33,14 @@
   },
   "dependencies": {
     "@types/q": "^0.0.27",
+    "@types/shelljs": "^0.3.27",
     "beautylog": "^5.0.14",
     "npmextra": "^1.0.8",
     "q": "^1.4.1",
     "rxjs": "^5.0.0-beta.10",
     "shelljs": "^0.7.0",
     "smartfile": "^4.0.11",
+    "smartstring": "^2.0.15",
     "typings-global": "^1.0.6"
   }
 }

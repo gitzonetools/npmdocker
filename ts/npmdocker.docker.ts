@@ -3,14 +3,18 @@ import * as paths from "./npmdocker.paths";
 import * as snippets from "./npmdocker.snippets";
 
 let config;
-let imageTag = "npmdocker-temp-image"
-let containerName = "npmdocker-temp-container"
+let dockerData = {
+    imageTag: "npmdocker-temp-image:latest",
+    containerName: "npmdocker-temp-container",
+    exitCode:0
+};
 /**
  * check if docker is available
  */
 let checkDocker = () => {
     let done = plugins.q.defer();
     if(plugins.shelljs.which("docker")){
+        plugins.beautylog.ok("Docker found!")
         done.resolve();
     } else {
         done.reject(new Error("docker not found on this machine"));
@@ -23,11 +27,15 @@ let checkDocker = () => {
  */
 let buildDockerFile = () => {
     let done = plugins.q.defer();
-    let dockerfile = snippets.dockerfileSnippet({
+    let dockerfile:string = snippets.dockerfileSnippet({
         baseImage:config.baseImage,
         command:config.command
     });
-    plugins.smartfile.memory.toFsSync(JSON.stringify(dockerfile),paths.dockerfile);
+    plugins.beautylog.info(`Base image is: ${config.baseImage}`);
+    plugins.beautylog.info(`Command is: ${config.command}`);
+    plugins.smartfile.memory.toFsSync(dockerfile,paths.dockerfile);
+    plugins.beautylog.ok("Dockerfile created!");
+    done.resolve();
     return done.promise
 };
 
@@ -36,9 +44,16 @@ let buildDockerFile = () => {
  */
 let buildDockerImage = () => {
     let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker pull ${config.baseImage}`); // first pull latest version of baseImage
-    plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -v ${paths.cwd}:/workdir -t ${imageTag} ${paths.assets}`);
-    done.resolve();
+    plugins.beautylog.log("pulling latest image...");
+    plugins.shelljs.exec(`docker pull ${config.baseImage}`,{
+        silent:true
+    }); // first pull latest version of baseImage
+    plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,{
+        silent:true
+    },() => {
+        plugins.beautylog.ok("Dockerimage built!")
+        done.resolve();
+    });
     return done.promise
 };
 
@@ -47,17 +62,30 @@ let buildDockerImage = () => {
  */
 let runDockerImage = () => {
     let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker run --name ${containerName} ${imageTag}`);
-    return done.promise
+    plugins.beautylog.info("Now starting Container!");
+    dockerData.exitCode = plugins.shelljs.exec(`docker run  -v ${paths.cwd}:/workspace --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
+    done.resolve();
+    return done.promise;
 };
 
 let deleteDockerContainter = () => {
     let done = plugins.q.defer();
+    plugins.shelljs.exec(`docker rm ${dockerData.containerName}`,{
+        silent:true
+    });
+    done.resolve();
+    plugins.beautylog.ok("removed test container!");
     return done.promise
 };
 
 let deleteDockerImage = () => {
     let done = plugins.q.defer();
+    plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`,{
+        silent:true
+    });
+    done.resolve();
+    plugins.beautylog.ok("removed test image!");
+    plugins.beautylog.ok("Cleaned up!");
     return done.promise
 };
 

@@ -4,12 +4,15 @@ import * as paths from "./npmdocker.paths";
 export interface IConfig {
     baseImage:string;
     command:string;
+    exitCode?:number
 }
 
 let config:IConfig = plugins.npmextra.dataFor({
     toolName:"npmdocker",
-    defaultSettings: {},
-    cwd: ""
+    defaultSettings: {
+        baseImage:"hosttoday/ht-docker-node:npmts",
+        command:"npm test"    
+    }
 });
 
 export let run = () => {
