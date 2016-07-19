@@ -1,5 +1,6 @@
 {
     "npmts":{
-        "mode":"default"
+        "mode":"default",
+        "cli":true
     }
 }
