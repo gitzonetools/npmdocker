@@ -4,24 +4,10 @@ stages:
 - test
 - release
 
-testLEGACY:
+test:
   stage: test
   script:
-    - npmci test legacy
-  tags:
-    - docker
-
-testLTS:
-  stage: test
-  script:
-    - npmci test lts
-  tags:
-    - docker
-    
-testSTABLE:
-  stage: test
-  script:
-    - npmci test stable
+    - npm test
   tags:
     - docker
 
