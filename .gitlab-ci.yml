@@ -10,6 +10,8 @@ test:
     - npm test
   tags:
     - docker
+    - lossless
+    - priv
 
 release:
   stage: release
