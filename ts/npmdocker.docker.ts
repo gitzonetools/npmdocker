@@ -70,7 +70,11 @@ let runDockerImage = () => {
     let done = plugins.q.defer();
     npmdockerOra.text("starting Container...");
     npmdockerOra.end();
-    config.exitCode = plugins.shelljs.exec(`docker run  -v ${paths.cwd}:/workspace --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
+    let dockerSockString:string = "";
+    if(config.dockerSock){
+        dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
+    };
+    config.exitCode = plugins.shelljs.exec(`docker run  -v ${paths.cwd}:/workspace ${dockerSockString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
     done.resolve();
     return done.promise;
 };
