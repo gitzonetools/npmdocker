@@ -53,6 +53,11 @@ let buildDockerImage = () => {
         silent:true
     },() => {
         npmdockerOra.text("building Dockerimage...");
+        // are we creating a build context form project ?
+        if(process.env.CI == "true"){
+            npmdockerOra.text("creating build context...");
+            plugins.smartfile.fs.copySync(paths.cwd,paths.buildContextDir);
+        }
         plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,{
             silent:true
         },() => {
@@ -70,11 +75,17 @@ let runDockerImage = () => {
     let done = plugins.q.defer();
     npmdockerOra.text("starting Container...");
     npmdockerOra.end();
+    // Are we mounting the project directory?
+    let dockerProjectMountString:string = "";
+    if(process.env.CI != "true"){
+        dockerProjectMountString = `-v ${paths.cwd}:/workspace`
+    };
+    // Are we mounting docker.sock?
     let dockerSockString:string = "";
     if(config.dockerSock){
         dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
     };
-    config.exitCode = plugins.shelljs.exec(`docker run  -v ${paths.cwd}:/workspace ${dockerSockString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
+    config.exitCode = plugins.shelljs.exec(`docker run ${dockerProjectMountString} ${dockerSockString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
     done.resolve();
     return done.promise;
 };
@@ -94,11 +105,18 @@ let deleteDockerImage = () => {
     plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`,{
         silent:true
     });
-    done.resolve();
     plugins.beautylog.ok("removed test image!");
     plugins.beautylog.ok("Cleaned up!");
+    done.resolve();
     return done.promise
 };
+
+let deleteBuildContext = () => {
+    let done = plugins.q.defer();
+    plugins.smartfile.fs.removeSync(paths.buildContextDir);
+    done.resolve();
+    return done.promise;
+}
 
 
 
@@ -111,6 +129,7 @@ export let run = (configArg) => {
         .then(runDockerImage)
         .then(deleteDockerContainter)
         .then(deleteDockerImage)
+        .then(deleteBuildContext)
         .then(() => {
             done.resolve(config);
         })

@@ -1,5 +1,5 @@
 FROM hosttoday/ht-docker-node:npmts
-RUN mkdir /workspace
+COPY ./buildContextDir /workspace
 WORKDIR /workspace
 ENV CI=true
 CMD ["npm","test"];

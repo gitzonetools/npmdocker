@@ -1,6 +1,7 @@
 {
     "npmts":{
         "mode":"default",
-        "cli":true
+        "cli":true,
+        "dockerSock":true
     }
 }

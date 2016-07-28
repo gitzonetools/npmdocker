@@ -12,7 +12,7 @@ exports.dockerfileSnippet = (optionsArg) => {
     ;
     return plugins.smartstring.indent.normalize(`
         FROM ${optionsArg.baseImage}
-        RUN mkdir /workspace
+        COPY ./buildContextDir /workspace
         WORKDIR /workspace
         ENV CI=true
         CMD [${commandString}];
