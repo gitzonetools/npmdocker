@@ -93,7 +93,7 @@ let runDockerImage = () => {
 
 let deleteDockerContainer = () => {
     let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker rm ${dockerData.containerName}`,{
+    plugins.shelljs.exec(`docker rm -f ${dockerData.containerName}`,{
         silent:true
     });
     done.resolve();
