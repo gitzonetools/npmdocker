@@ -5,6 +5,7 @@ services:
 stages:
 - test
 - release
+- trigger
 
 test:
   stage: test
@@ -25,3 +26,16 @@ release:
     - tags
   tags:
     - docker
+    - lossless
+    - priv
+
+trigger:
+  stage: trigger
+  script:
+    - npmci trigger
+  only:
+    - tags
+  tags:
+    - docker
+    - lossless
+    - priv
