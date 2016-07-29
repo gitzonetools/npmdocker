@@ -85,18 +85,18 @@ let runDockerImage = () => {
     if(config.dockerSock){
         dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
     };
+    plugins.beautylog.log("now running Dockerimage");
     config.exitCode = plugins.shelljs.exec(`docker run ${dockerProjectMountString} ${dockerSockString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
     done.resolve();
     return done.promise;
 };
 
-let deleteDockerContainter = () => {
+let deleteDockerContainer = () => {
     let done = plugins.q.defer();
     plugins.shelljs.exec(`docker rm ${dockerData.containerName}`,{
         silent:true
     });
     done.resolve();
-    plugins.beautylog.ok("removed test container!");
     return done.promise
 };
 
@@ -105,17 +105,36 @@ let deleteDockerImage = () => {
     plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`,{
         silent:true
     });
-    plugins.beautylog.ok("removed test image!");
-    plugins.beautylog.ok("Cleaned up!");
     done.resolve();
     return done.promise
 };
 
 let deleteBuildContext = () => {
     let done = plugins.q.defer();
-    plugins.smartfile.fs.removeSync(paths.buildContextDir);
-    done.resolve();
+    plugins.smartfile.fs.remove(paths.buildContextDir)
+        .then(done.resolve);
     return done.promise;
+};
+
+let preClean = () => {
+    let done = plugins.q.defer();
+    deleteDockerImage()
+        .then(deleteDockerContainer)
+        .then(() => {
+            plugins.beautylog.ok("ensured clean Docker environment!");
+            done.resolve();
+        });
+};
+
+let postClean = () => {
+    let done = plugins.q.defer();
+    deleteDockerContainer()
+        .then(deleteDockerImage)
+        .then(deleteBuildContext)
+        .then(() => {
+            plugins.beautylog.ok("cleaned up!");
+            done.resolve();
+        });
 }
 
 
@@ -124,12 +143,11 @@ export let run = (configArg) => {
     let done = plugins.q.defer();
     config = configArg;
     checkDocker()
+        .then(preClean)
         .then(buildDockerFile)
         .then(buildDockerImage)
         .then(runDockerImage)
-        .then(deleteDockerContainter)
-        .then(deleteDockerImage)
-        .then(deleteBuildContext)
+        .then(postClean)
         .then(() => {
             done.resolve(config);
         })
