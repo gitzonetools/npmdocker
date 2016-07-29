@@ -18,6 +18,7 @@ test:
     - priv
 
 release:
+  image: hosttoday/ht-docker-node:npmts
   stage: release
   environment: npmjs-com_registry
   script:
