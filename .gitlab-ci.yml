@@ -1,4 +1,6 @@
 image: hosttoday/ht-docker-dbase:npmts
+services:
+  - docker:dind
 
 stages:
 - test
