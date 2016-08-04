@@ -2,12 +2,18 @@ import * as plugins from "./npmdocker.plugins";
 import * as paths from "./npmdocker.paths";
 import * as snippets from "./npmdocker.snippets";
 
-import {npmdockerOra} from "./npmdocker.promisechain";
+import { npmdockerOra } from "./npmdocker.promisechain";
 
-let config;
+// interfaces
+import { IConfig } from "./npmdocker.config";
+
+let config: IConfig;
 let dockerData = {
     imageTag: "npmdocker-temp-image:latest",
-    containerName: "npmdocker-temp-container"
+    containerName: "npmdocker-temp-container",
+    dockerProjectMountString: "",
+    dockerSockString: "",
+    dockerEnvString: ""
 };
 
 /**
@@ -16,7 +22,7 @@ let dockerData = {
 let checkDocker = () => {
     let done = plugins.q.defer();
     npmdockerOra.text("checking docker...");
-    if(plugins.shelljs.which("docker")){
+    if (plugins.shelljs.which("docker")) {
         plugins.beautylog.ok("Docker found!")
         done.resolve();
     } else {
@@ -31,13 +37,13 @@ let checkDocker = () => {
 let buildDockerFile = () => {
     let done = plugins.q.defer();
     npmdockerOra.text("building Dockerfile...");
-    let dockerfile:string = snippets.dockerfileSnippet({
-        baseImage:config.baseImage,
-        command:config.command
+    let dockerfile: string = snippets.dockerfileSnippet({
+        baseImage: config.baseImage,
+        command: config.command
     });
     plugins.beautylog.info(`Base image is: ${config.baseImage}`);
     plugins.beautylog.info(`Command is: ${config.command}`);
-    plugins.smartfile.memory.toFsSync(dockerfile,paths.dockerfile);
+    plugins.smartfile.memory.toFsSync(dockerfile, paths.dockerfile);
     plugins.beautylog.ok("Dockerfile created!");
     done.resolve();
     return done.promise
@@ -49,23 +55,51 @@ let buildDockerFile = () => {
 let buildDockerImage = () => {
     let done = plugins.q.defer();
     npmdockerOra.text("pulling latest base image from registry...");
-    plugins.shelljs.exec(`docker pull ${config.baseImage}`,{
-        silent:true
-    },() => {
+    plugins.shelljs.exec(`docker pull ${config.baseImage}`, {
+        silent: true
+    }, () => {
         npmdockerOra.text("building Dockerimage...");
         // are we creating a build context form project ?
-        if(process.env.CI == "true"){
+        if (process.env.CI == "true") {
             npmdockerOra.text("creating build context...");
-            plugins.smartfile.fs.copySync(paths.cwd,paths.buildContextDir);
+            plugins.smartfile.fs.copySync(paths.cwd, paths.buildContextDir);
         }
-        plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,{
-            silent:true
-        },() => {
+        plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`, {
+            silent: true
+        }, () => {
             plugins.beautylog.ok("Dockerimage built!")
             done.resolve();
         });
     }); // first pull latest version of baseImage
     return done.promise
+};
+
+let buildDockerProjectMountString = () => {
+    let done = plugins.q.defer();
+    if (process.env.CI != "true") {
+        dockerData.dockerProjectMountString = `-v ${paths.cwd}:/workspace`;
+    };
+    done.resolve();
+    return done.promise;
+}
+
+let buildDockerEnvString = () => {
+    let done = plugins.q.defer();
+    console.log(config.keyValueObjectArray);
+    for (let keyValueObjectArg of config.keyValueObjectArray) {
+        let envString = dockerData.dockerEnvString = dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `
+    };
+    done.resolve();
+    return done.promise;
+}
+
+let buildDockerSockString = () => {
+    let done = plugins.q.defer();
+    if (config.dockerSock) {
+        dockerData.dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
+    };
+    done.resolve()
+    return done;
 };
 
 /**
@@ -75,26 +109,16 @@ let runDockerImage = () => {
     let done = plugins.q.defer();
     npmdockerOra.text("starting Container...");
     npmdockerOra.end();
-    // Are we mounting the project directory?
-    let dockerProjectMountString:string = "";
-    if(process.env.CI != "true"){
-        dockerProjectMountString = `-v ${paths.cwd}:/workspace`
-    };
-    // Are we mounting docker.sock?
-    let dockerSockString:string = "";
-    if(config.dockerSock){
-        dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
-    };
     plugins.beautylog.log("now running Dockerimage");
-    config.exitCode = plugins.shelljs.exec(`docker run ${dockerProjectMountString} ${dockerSockString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
+    config.exitCode = plugins.shelljs.exec(`docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${dockerData.dockerEnvString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
     done.resolve();
     return done.promise;
 };
 
 let deleteDockerContainer = () => {
     let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker rm -f ${dockerData.containerName}`,{
-        silent:true
+    plugins.shelljs.exec(`docker rm -f ${dockerData.containerName}`, {
+        silent: true
     });
     done.resolve();
     return done.promise
@@ -102,8 +126,8 @@ let deleteDockerContainer = () => {
 
 let deleteDockerImage = () => {
     let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`,{
-        silent:true
+    plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`, {
+        silent: true
     });
     done.resolve();
     return done.promise
@@ -146,10 +170,13 @@ export let run = (configArg) => {
         .then(preClean)
         .then(buildDockerFile)
         .then(buildDockerImage)
+        .then(buildDockerProjectMountString)
+        .then(buildDockerEnvString)
+        .then(buildDockerSockString)
         .then(runDockerImage)
         .then(postClean)
         .then(() => {
             done.resolve(config);
-        })
+        }).catch(err => {console.log(err)});
     return done.promise;
 }

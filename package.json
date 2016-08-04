@@ -31,20 +31,22 @@
   },
   "homepage": "https://gitlab.com/pushrocks/npmdocker#README",
   "devDependencies": {
-    "npmts-g": "^5.2.6",
+    "npmts-g": "^5.2.8",
     "should": "^10.0.0",
     "typings-test": "^1.0.1"
   },
   "dependencies": {
-    "@types/q": "^0.0.27",
-    "@types/shelljs": "^0.3.27",
-    "beautylog": "^5.0.14",
+    "@types/q": "0.x.x",
+    "@types/shelljs": "0.x.x",
+    "beautylog": "^5.0.20",
     "npmextra": "^1.0.8",
+    "projectinfo": "^1.0.3",
     "q": "^1.4.1",
+    "qenv": "^1.1.1",
     "rxjs": "^5.0.0-beta.10",
-    "shelljs": "^0.7.0",
-    "smartfile": "^4.0.11",
-    "smartstring": "^2.0.15",
+    "shelljs": "^0.7.3",
+    "smartfile": "^4.0.13",
+    "smartstring": "^2.0.17",
     "typings-global": "^1.0.6"
   }
 }
