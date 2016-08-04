@@ -85,7 +85,6 @@ let buildDockerProjectMountString = () => {
 
 let buildDockerEnvString = () => {
     let done = plugins.q.defer();
-    console.log(config.keyValueObjectArray);
     for (let keyValueObjectArg of config.keyValueObjectArray) {
         let envString = dockerData.dockerEnvString = dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `
     };
