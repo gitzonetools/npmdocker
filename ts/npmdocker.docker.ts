@@ -1,181 +1,208 @@
-import * as plugins from "./npmdocker.plugins";
-import * as paths from "./npmdocker.paths";
-import * as snippets from "./npmdocker.snippets";
-
-import { npmdockerOra } from "./npmdocker.promisechain";
+import * as plugins from './npmdocker.plugins';
+import * as paths from './npmdocker.paths';
+import * as snippets from './npmdocker.snippets'
 
 // interfaces
-import { IConfig } from "./npmdocker.config";
+import { IConfig } from './npmdocker.config'
 
-let config: IConfig;
+let config: IConfig
+
+/**
+ * the docker data used to build the internal testing container
+ */
 let dockerData = {
-    imageTag: "npmdocker-temp-image:latest",
-    containerName: "npmdocker-temp-container",
-    dockerProjectMountString: "",
-    dockerSockString: "",
-    dockerEnvString: ""
-};
+  imageTag: 'npmdocker-temp-image:latest',
+  containerName: 'npmdocker-temp-container',
+  dockerProjectMountString: '',
+  dockerSockString: '',
+  dockerEnvString: ''
+}
 
 /**
  * check if docker is available
  */
 let checkDocker = () => {
-    let done = plugins.q.defer();
-    npmdockerOra.text("checking docker...");
-    if (plugins.shelljs.which("docker")) {
-        plugins.beautylog.ok("Docker found!")
-        done.resolve();
-    } else {
-        done.reject(new Error("docker not found on this machine"));
-    }
-    return done.promise;
-};
+  let done = plugins.q.defer()
+  plugins.beautylog.ora.text('checking docker...')
+  if (plugins.shelljs.which('docker')) {
+    plugins.beautylog.ok('Docker found!')
+    done.resolve()
+  } else {
+    done.reject(new Error('docker not found on this machine'))
+  }
+  return done.promise
+}
 
 /**
  * builds the Dockerfile according to the config in the project
  */
 let buildDockerFile = () => {
-    let done = plugins.q.defer();
-    npmdockerOra.text("building Dockerfile...");
-    let dockerfile: string = snippets.dockerfileSnippet({
-        baseImage: config.baseImage,
-        command: config.command
-    });
-    plugins.beautylog.info(`Base image is: ${config.baseImage}`);
-    plugins.beautylog.info(`Command is: ${config.command}`);
-    plugins.smartfile.memory.toFsSync(dockerfile, paths.dockerfile);
-    plugins.beautylog.ok("Dockerfile created!");
-    done.resolve();
-    return done.promise
-};
+  let done = plugins.q.defer()
+  plugins.beautylog.ora.text('building Dockerfile...')
+  let dockerfile: string = snippets.dockerfileSnippet({
+    baseImage: config.baseImage,
+    command: config.command
+  })
+  plugins.beautylog.info(`Base image is: ${config.baseImage}`)
+  plugins.beautylog.info(`Command is: ${config.command}`)
+  plugins.smartfile.memory.toFsSync(dockerfile, paths.dockerfile)
+  plugins.beautylog.ok('Dockerfile created!')
+  done.resolve()
+  return done.promise
+}
 
 /**
  * builds the Dockerimage from the built Dockerfile
  */
 let buildDockerImage = () => {
-    let done = plugins.q.defer();
-    npmdockerOra.text("pulling latest base image from registry...");
-    plugins.shelljs.exec(`docker pull ${config.baseImage}`, {
-        silent: true
-    }, () => {
-        npmdockerOra.text("building Dockerimage...");
-        // are we creating a build context form project ?
-        if (process.env.CI == "true") {
-            npmdockerOra.text("creating build context...");
-            plugins.smartfile.fs.copySync(paths.cwd, paths.buildContextDir);
+  let done = plugins.q.defer()
+  plugins.beautylog.ora.text('pulling latest base image from registry...')
+  plugins.shelljs.exec(
+    `docker pull ${config.baseImage}`,
+    {
+      silent: true
+    },
+    () => {
+      plugins.beautylog.ora.text('building Dockerimage...')
+      // are we creating a build context form project ?
+      if (process.env.CI === 'true') {
+        plugins.beautylog.ora.text('creating build context...')
+        plugins.smartfile.fs.copySync(paths.cwd, paths.buildContextDir)
+      }
+      plugins.shelljs.exec(
+        `docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,
+        {
+          silent: true
+        },
+        () => {
+          plugins.beautylog.ok('Dockerimage built!')
+          done.resolve()
         }
-        plugins.shelljs.exec(`docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`, {
-            silent: true
-        }, () => {
-            plugins.beautylog.ok("Dockerimage built!")
-            done.resolve();
-        });
-    }); // first pull latest version of baseImage
-    return done.promise
-};
+      )
+    }
+  ) // first pull latest version of baseImage
+  return done.promise
+}
 
 let buildDockerProjectMountString = () => {
-    let done = plugins.q.defer();
-    if (process.env.CI != "true") {
-        dockerData.dockerProjectMountString = `-v ${paths.cwd}:/workspace`;
-    };
-    done.resolve();
-    return done.promise;
+  let done = plugins.q.defer()
+  if (process.env.CI !== 'true') {
+    dockerData.dockerProjectMountString = `-v ${paths.cwd}:/workspace`
+  };
+  done.resolve()
+  return done.promise
 }
 
+/**
+ * builds an environment string that docker cli understands
+ */
 let buildDockerEnvString = () => {
-    let done = plugins.q.defer();
-    for (let keyValueObjectArg of config.keyValueObjectArray) {
-        let envString = dockerData.dockerEnvString = dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `
-    };
-    done.resolve();
-    return done.promise;
+  let done = plugins.q.defer()
+  for (let keyValueObjectArg of config.keyValueObjectArray) {
+    let envString = dockerData.dockerEnvString = dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `
+  };
+  done.resolve()
+  return done.promise
 }
 
+/**
+ * creates string to mount the docker.sock inside the testcontainer
+ */
 let buildDockerSockString = () => {
-    let done = plugins.q.defer();
-    if (config.dockerSock) {
-        dockerData.dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
-    };
-    done.resolve()
-    return done;
-};
+  let done = plugins.q.defer()
+  if (config.dockerSock) {
+    dockerData.dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
+  };
+  done.resolve()
+  return done
+}
 
 /**
  * creates a container by running the built Dockerimage
  */
 let runDockerImage = () => {
-    let done = plugins.q.defer();
-    npmdockerOra.text("starting Container...");
-    npmdockerOra.end();
-    plugins.beautylog.log("now running Dockerimage");
-    config.exitCode = plugins.shelljs.exec(`docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${dockerData.dockerEnvString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code;
-    done.resolve();
-    return done.promise;
-};
+  let done = plugins.q.defer()
+  plugins.beautylog.ora.text('starting Container...')
+  plugins.beautylog.ora.end()
+  plugins.beautylog.log('now running Dockerimage')
+  config.exitCode = plugins.shelljs.exec(`docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${dockerData.dockerEnvString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code
+  done.resolve()
+  return done.promise
+}
 
+/**
+ * cleans up: deletes the test container
+ */
 let deleteDockerContainer = () => {
-    let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker rm -f ${dockerData.containerName}`, {
-        silent: true
-    });
-    done.resolve();
-    return done.promise
-};
+  let done = plugins.q.defer()
+  plugins.shelljs.exec(`docker rm -f ${dockerData.containerName}`, {
+    silent: true
+  })
+  done.resolve()
+  return done.promise
+}
 
+/**
+ * cleans up deletes the test image
+ */
 let deleteDockerImage = () => {
-    let done = plugins.q.defer();
-    plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`, {
-        silent: true
-    });
-    done.resolve();
-    return done.promise
-};
+  let done = plugins.q.defer()
+  plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`, {
+    silent: true
+  })
+  done.resolve()
+  return done.promise
+}
 
+/**
+ * cleans up, deletes the build context
+ */
 let deleteBuildContext = () => {
-    let done = plugins.q.defer();
-    plugins.smartfile.fs.remove(paths.buildContextDir)
-        .then(done.resolve);
-    return done.promise;
-};
+  let done = plugins.q.defer()
+  plugins.smartfile.fs.remove(paths.buildContextDir)
+    .then(() => {
+      done.resolve()
+    })
+  return done.promise
+}
 
 let preClean = () => {
-    let done = plugins.q.defer();
-    deleteDockerImage()
-        .then(deleteDockerContainer)
-        .then(() => {
-            plugins.beautylog.ok("ensured clean Docker environment!");
-            done.resolve();
-        });
-};
+  let done = plugins.q.defer()
+  deleteDockerImage()
+    .then(deleteDockerContainer)
+    .then(() => {
+      plugins.beautylog.ok('ensured clean Docker environment!')
+      done.resolve()
+    })
+}
 
 let postClean = () => {
-    let done = plugins.q.defer();
-    deleteDockerContainer()
-        .then(deleteDockerImage)
-        .then(deleteBuildContext)
-        .then(() => {
-            plugins.beautylog.ok("cleaned up!");
-            done.resolve();
-        });
+  let done = plugins.q.defer()
+  deleteDockerContainer()
+    .then(deleteDockerImage)
+    .then(deleteBuildContext)
+    .then(() => {
+      plugins.beautylog.ok('cleaned up!')
+      done.resolve()
+    })
 }
 
 
 
 export let run = (configArg) => {
-    let done = plugins.q.defer();
-    config = configArg;
-    checkDocker()
-        .then(preClean)
-        .then(buildDockerFile)
-        .then(buildDockerImage)
-        .then(buildDockerProjectMountString)
-        .then(buildDockerEnvString)
-        .then(buildDockerSockString)
-        .then(runDockerImage)
-        .then(postClean)
-        .then(() => {
-            done.resolve(config);
-        }).catch(err => {console.log(err)});
-    return done.promise;
+  let done = plugins.q.defer()
+  config = configArg
+  checkDocker()
+    .then(preClean)
+    .then(buildDockerFile)
+    .then(buildDockerImage)
+    .then(buildDockerProjectMountString)
+    .then(buildDockerEnvString)
+    .then(buildDockerSockString)
+    .then(runDockerImage)
+    .then(postClean)
+    .then(() => {
+      done.resolve(config);
+    }).catch(err => { console.log(err) })
+  return done.promise
 }

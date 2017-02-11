@@ -2,4 +2,4 @@ FROM hosttoday/ht-docker-node:npmts
 COPY ./buildContextDir /workspace
 WORKDIR /workspace
 ENV CI=true
-CMD ["npm","run","npmdocker"];
+CMD ["npmci","test","stable"];

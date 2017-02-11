@@ -1,6 +1,8 @@
 node_modules/
 coverage/
-docs/
+pages/
+public/
+
 test/
 assets/
 .nogit/

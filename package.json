@@ -12,6 +12,7 @@
   },
   "scripts": {
     "test": "(npm run clean && npm run compile && npm run setupCheck && npm run check)",
+    "testDev": "(npm run compile && npm run check)",
     "clean": "(rm -rf test/)",
     "compile": "(npmts --notest)",
     "setupCheck": "(git clone https://gitlab.com/sandboxzone/sandbox-npmts.git test/)",
@@ -19,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/pushrocks/npmdocker.git"
+    "url": "git+ssh://git@gitlab.com/gitzone/npmdocker.git"
   },
   "keywords": [
     "docker"
@@ -27,23 +28,22 @@
   "author": "Lossless GmbH",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/pushrocks/npmdocker/issues"
+    "url": "https://gitlab.com/gitzone/npmdocker/issues"
   },
-  "homepage": "https://gitlab.com/pushrocks/npmdocker#README",
+  "homepage": "https://gitlab.com/gitzone/npmdocker#README",
   "devDependencies": {
-    "npmts-g": "^5.2.8"
+    "npmts-g": "^6.0.0"
   },
   "dependencies": {
-    "@types/q": "0.x.x",
     "@types/shelljs": "0.x.x",
-    "beautylog": "^5.0.20",
-    "npmextra": "^1.0.8",
-    "projectinfo": "^1.0.3",
-    "q": "^1.4.1",
-    "qenv": "^1.1.1",
-    "shelljs": "^0.7.3",
-    "smartfile": "^4.0.13",
-    "smartstring": "^2.0.17",
-    "typings-global": "^1.0.6"
+    "beautylog": "^6.1.1",
+    "npmextra": "^2.0.3",
+    "projectinfo": "^3.0.1",
+    "qenv": "^1.1.3",
+    "shelljs": "^0.7.6",
+    "smartfile": "^4.1.5",
+    "smartq": "^1.1.0",
+    "smartstring": "^2.0.22",
+    "typings-global": "^1.0.14"
   }
 }

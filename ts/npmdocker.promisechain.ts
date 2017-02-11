@@ -1,12 +1,11 @@
 import * as plugins from "./npmdocker.plugins";
 import * as paths from "./npmdocker.paths";
-import {Ora} from "beautylog";
+
 //modules
 import * as ConfigModule from "./npmdocker.config";
 import * as DockerModule from "./npmdocker.docker";
 
-export let npmdockerOra = new Ora("npmdocker","blue");
-npmdockerOra.start();
+plugins.beautylog.ora.start();
 export let run = () => {
     let done = plugins.q.defer();
     ConfigModule.run()
