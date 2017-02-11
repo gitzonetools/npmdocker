@@ -1,12 +1,23 @@
 "use strict";
 require("typings-global");
-exports.beautylog = require("beautylog");
-exports.npmextra = require("npmextra");
-exports.path = require("path");
-exports.projectinfo = require("projectinfo");
-exports.q = require("smartq");
-exports.qenv = require("qenv");
-exports.shelljs = require("shelljs");
-exports.smartfile = require("smartfile");
-exports.smartstring = require("smartstring");
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnBtZG9ja2VyLnBsdWdpbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi90cy9ucG1kb2NrZXIucGx1Z2lucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsMEJBQXdCO0FBQ3hCLHlDQUErQztBQUMvQyx1Q0FBNkM7QUFDN0MsK0JBQXFDO0FBQ3JDLDZDQUFtRDtBQUNuRCw4QkFBb0M7QUFDcEMsK0JBQXFDO0FBQ3JDLHFDQUEyQztBQUMzQyx5Q0FBK0M7QUFDL0MsNkNBQW1EIn0=
+const beautylog = require("beautylog");
+exports.beautylog = beautylog;
+const npmextra = require("npmextra");
+exports.npmextra = npmextra;
+const path = require("path");
+exports.path = path;
+const projectinfo = require("projectinfo");
+exports.projectinfo = projectinfo;
+const q = require("smartq");
+exports.q = q;
+const qenv = require("qenv");
+exports.qenv = qenv;
+const shelljs = require("shelljs");
+exports.shelljs = shelljs;
+const smartcli = require("smartcli");
+exports.smartcli = smartcli;
+const smartfile = require("smartfile");
+exports.smartfile = smartfile;
+const smartstring = require("smartstring");
+exports.smartstring = smartstring;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnBtZG9ja2VyLnBsdWdpbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi90cy9ucG1kb2NrZXIucGx1Z2lucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsMEJBQXVCO0FBQ3ZCLHVDQUFzQztBQVlwQyw4QkFBUztBQVhYLHFDQUFvQztBQVlsQyw0QkFBUTtBQVhWLDZCQUE0QjtBQVkxQixvQkFBSTtBQVhOLDJDQUEwQztBQVl4QyxrQ0FBVztBQVhiLDRCQUEyQjtBQVl6QixjQUFDO0FBWEgsNkJBQTRCO0FBWTFCLG9CQUFJO0FBWE4sbUNBQWtDO0FBWWhDLDBCQUFPO0FBWFQscUNBQW9DO0FBWWxDLDRCQUFRO0FBWFYsdUNBQXNDO0FBWXBDLDhCQUFTO0FBWFgsMkNBQTBDO0FBWXhDLGtDQUFXIn0=

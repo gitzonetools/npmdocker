@@ -1,10 +1,24 @@
-import "typings-global";
-export import beautylog = require("beautylog");
-export import npmextra = require("npmextra");
-export import path = require("path");
-export import projectinfo = require("projectinfo");
-export import q = require("smartq");
-export import qenv = require("qenv");
-export import shelljs = require("shelljs");
-export import smartfile = require("smartfile");
-export import smartstring = require("smartstring");
+import 'typings-global'
+import * as beautylog from 'beautylog'
+import * as npmextra from 'npmextra'
+import * as path from 'path'
+import * as projectinfo from 'projectinfo'
+import * as q from 'smartq'
+import * as qenv from 'qenv'
+import * as shelljs from 'shelljs'
+import * as smartcli from 'smartcli'
+import * as smartfile from 'smartfile'
+import * as smartstring from 'smartstring'
+
+export {
+  beautylog,
+  npmextra,
+  path,
+  projectinfo,
+  q,
+  qenv,
+  shelljs,
+  smartcli,
+  smartfile,
+  smartstring
+}

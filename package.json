@@ -11,12 +11,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "(npm run clean && npm run compile && npm run setupCheck && npm run check)",
-    "testDev": "(npm run compile && npm run check)",
+    "test": "(npm run clean && npm run compile && npm run setupCheck && npm run testStandard && npm run testClean)",
+    "testStandard": "(cd test/ && node ../dist/index.js)",
+    "testClean": "(cd test/ && node ../dist/index.js clean --all)",
     "clean": "(rm -rf test/)",
     "compile": "(npmts --notest)",
-    "setupCheck": "(git clone https://gitlab.com/sandboxzone/sandbox-npmts.git test/)",
-    "check": "(cd test/ && node ../dist/index.js)"
+    "setupCheck": "(git clone https://gitlab.com/sandboxzone/sandbox-npmts.git test/)"
   },
   "repository": {
     "type": "git",
@@ -41,6 +41,7 @@
     "projectinfo": "^3.0.1",
     "qenv": "^1.1.3",
     "shelljs": "^0.7.6",
+    "smartcli": "^2.0.1",
     "smartfile": "^4.1.5",
     "smartq": "^1.1.0",
     "smartstring": "^2.0.22",
