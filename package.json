@@ -11,8 +11,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "(npm run clean && npm run compile && npm run setupCheck && npm run testStandard && npm run testClean)",
+    "test": "(npm run clean && npm run compile && npm run setupCheck && npm run testStandard && npm run testSpeed && npm run testClean)",
     "testStandard": "(cd test/ && node ../dist/index.js)",
+    "testSpeed": "(cd test/ && node ../dist/index.js speedtest)",
     "testClean": "(cd test/ && node ../dist/index.js clean --all)",
     "clean": "(rm -rf test/)",
     "compile": "(npmts --notest)",

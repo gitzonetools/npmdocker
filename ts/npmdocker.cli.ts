@@ -47,5 +47,11 @@ export let run = () => {
     plugins.beautylog.ora.endOk('docker environment now is clean!')
   })
 
+  npmdockerCli.addCommand('speedtest').then(argvArg => {
+    plugins.beautylog.ora.text('cleaning up docker env...')
+    plugins.shelljs.exec(`docker pull tianon/speedtest && docker run --rm tianon/speedtest`)
+    plugins.beautylog.ora.endOk('docker environment now is clean!')
+  })
+
   npmdockerCli.startParse()
 }
