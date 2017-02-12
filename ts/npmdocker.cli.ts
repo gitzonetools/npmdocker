@@ -39,7 +39,10 @@ export let run = () => {
       plugins.shelljs.exec(`docker rmi $(docker images -q -f dangling=true)`)
 
       plugins.beautylog.ora.text('removing all other images...')
-      plugins.shelljs.exec(`docker rmi $(docker images -q)`)
+      plugins.shelljs.exec(`docker rmi $(docker images -a -q)`)
+
+      plugins.beautylog.ora.text('removing all volumes...')
+      plugins.shelljs.exec(`docker volume rm $(docker volume ls -f dangling=true -q)`)
     }
     plugins.beautylog.ora.endOk('docker environment now is clean!')
   })
