@@ -3,5 +3,10 @@
         "mode":"default",
         "cli":true,
         "dockerSock":true
+    },
+    "npmci": {
+        "globalNpmTools": [
+            "npmts"
+        ]
     }
 }

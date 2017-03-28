@@ -1,4 +1,4 @@
-image: hosttoday/ht-docker-dbase:npmts
+image: hosttoday/ht-docker-dbase:npmci
 services:
   - docker:dind
 
@@ -10,8 +10,7 @@ stages:
 test:
   stage: test
   script:
-    - npm install
-    - npm test
+    - npmci test stable
   tags:
     - docker
     - lossless
