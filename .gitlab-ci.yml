@@ -17,7 +17,6 @@ test:
     - priv
 
 release:
-  image: hosttoday/ht-docker-node:npmts
   stage: release
   environment: npmjs-com_registry
   script:
@@ -30,7 +29,6 @@ release:
     - priv
 
 trigger:
-  image: hosttoday/ht-docker-node:npmts
   stage: trigger
   script:
     - npmci trigger
