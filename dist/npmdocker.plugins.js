@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 require("typings-global");
 const beautylog = require("beautylog");
 exports.beautylog = beautylog;
@@ -12,12 +13,12 @@ const q = require("smartq");
 exports.q = q;
 const qenv = require("qenv");
 exports.qenv = qenv;
-const shelljs = require("shelljs");
-exports.shelljs = shelljs;
 const smartcli = require("smartcli");
 exports.smartcli = smartcli;
 const smartfile = require("smartfile");
 exports.smartfile = smartfile;
+const smartshell = require("smartshell");
+exports.smartshell = smartshell;
 const smartstring = require("smartstring");
 exports.smartstring = smartstring;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnBtZG9ja2VyLnBsdWdpbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi90cy9ucG1kb2NrZXIucGx1Z2lucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsMEJBQXVCO0FBQ3ZCLHVDQUFzQztBQVlwQyw4QkFBUztBQVhYLHFDQUFvQztBQVlsQyw0QkFBUTtBQVhWLDZCQUE0QjtBQVkxQixvQkFBSTtBQVhOLDJDQUEwQztBQVl4QyxrQ0FBVztBQVhiLDRCQUEyQjtBQVl6QixjQUFDO0FBWEgsNkJBQTRCO0FBWTFCLG9CQUFJO0FBWE4sbUNBQWtDO0FBWWhDLDBCQUFPO0FBWFQscUNBQW9DO0FBWWxDLDRCQUFRO0FBWFYsdUNBQXNDO0FBWXBDLDhCQUFTO0FBWFgsMkNBQTBDO0FBWXhDLGtDQUFXIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnBtZG9ja2VyLnBsdWdpbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi90cy9ucG1kb2NrZXIucGx1Z2lucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLDBCQUF1QjtBQUN2Qix1Q0FBc0M7QUFZcEMsOEJBQVM7QUFYWCxxQ0FBb0M7QUFZbEMsNEJBQVE7QUFYViw2QkFBNEI7QUFZMUIsb0JBQUk7QUFYTiwyQ0FBMEM7QUFZeEMsa0NBQVc7QUFYYiw0QkFBMkI7QUFZekIsY0FBQztBQVhILDZCQUE0QjtBQVkxQixvQkFBSTtBQVhOLHFDQUFvQztBQVlsQyw0QkFBUTtBQVhWLHVDQUFzQztBQVlwQyw4QkFBUztBQVhYLHlDQUF3QztBQVl0QyxnQ0FBVTtBQVhaLDJDQUEwQztBQVl4QyxrQ0FBVyJ9

@@ -24,7 +24,7 @@ let dockerData = {
 let checkDocker = () => {
   let done = plugins.q.defer()
   plugins.beautylog.ora.text('checking docker...')
-  if (plugins.shelljs.which('docker')) {
+  if (plugins.smartshell.which('docker')) {
     plugins.beautylog.ok('Docker found!')
     done.resolve()
   } else {
@@ -54,145 +54,104 @@ let buildDockerFile = () => {
 /**
  * builds the Dockerimage from the built Dockerfile
  */
-let buildDockerImage = () => {
-  let done = plugins.q.defer()
+let buildDockerImage = async () => {
   plugins.beautylog.ora.text('pulling latest base image from registry...')
-  plugins.shelljs.exec(
-    `docker pull ${config.baseImage}`,
-    {
-      silent: true
-    },
-    () => {
-      plugins.beautylog.ora.text('building Dockerimage...')
-      // are we creating a build context form project ?
-      if (process.env.CI === 'true') {
-        plugins.beautylog.ora.text('creating build context...')
-        plugins.smartfile.fs.copySync(paths.cwd, paths.buildContextDir)
-      }
-      plugins.shelljs.exec(
-        `docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`,
-        {
-          silent: true
-        },
-        () => {
-          plugins.beautylog.ok('Dockerimage built!')
-          done.resolve()
-        }
-      )
+  await plugins.smartshell.execSilent(
+    `docker pull ${config.baseImage}`
+  ).then(async () => {
+    plugins.beautylog.ora.text('building Dockerimage...')
+    // are we creating a build context form project ?
+    if (process.env.CI === 'true') {
+      plugins.beautylog.ora.text('creating build context...')
+      plugins.smartfile.fs.copySync(paths.cwd, paths.buildContextDir)
     }
-  ) // first pull latest version of baseImage
-  return done.promise
+    await plugins.smartshell.execSilent(
+      `docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`
+    ).then(async () => {
+      plugins.beautylog.ok('Dockerimage built!')
+    })
+  })
 }
 
-let buildDockerProjectMountString = () => {
-  let done = plugins.q.defer()
+let buildDockerProjectMountString = async () => {
   if (process.env.CI !== 'true') {
     dockerData.dockerProjectMountString = `-v ${paths.cwd}:/workspace`
   };
-  done.resolve()
-  return done.promise
 }
 
 /**
  * builds an environment string that docker cli understands
  */
-let buildDockerEnvString = () => {
-  let done = plugins.q.defer()
+let buildDockerEnvString = async () => {
   for (let keyValueObjectArg of config.keyValueObjectArray) {
     let envString = dockerData.dockerEnvString = dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `
   };
-  done.resolve()
-  return done.promise
 }
 
 /**
  * creates string to mount the docker.sock inside the testcontainer
  */
-let buildDockerSockString = () => {
-  let done = plugins.q.defer()
+let buildDockerSockString = async () => {
   if (config.dockerSock) {
     dockerData.dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`
   };
-  done.resolve()
-  return done
 }
 
 /**
  * creates a container by running the built Dockerimage
  */
-let runDockerImage = () => {
+let runDockerImage = async () => {
   let done = plugins.q.defer()
   plugins.beautylog.ora.text('starting Container...')
   plugins.beautylog.ora.end()
   plugins.beautylog.log('now running Dockerimage')
-  config.exitCode = plugins.shelljs.exec(`docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${dockerData.dockerEnvString} --name ${dockerData.containerName} ${dockerData.imageTag}`).code
-  done.resolve()
-  return done.promise
+  config.exitCode = (await plugins.smartshell.exec(`docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${dockerData.dockerEnvString} --name ${dockerData.containerName} ${dockerData.imageTag}`)).exitCode
 }
 
 /**
  * cleans up: deletes the test container
  */
-let deleteDockerContainer = () => {
-  let done = plugins.q.defer()
-  plugins.shelljs.exec(`docker rm -f ${dockerData.containerName}`, {
-    silent: true
-  })
-  done.resolve()
-  return done.promise
+let deleteDockerContainer = async () => {
+  await plugins.smartshell.execSilent(`docker rm -f ${dockerData.containerName}`)
 }
 
 /**
  * cleans up deletes the test image
  */
-let deleteDockerImage = () => {
-  let done = plugins.q.defer()
-  plugins.shelljs.exec(`docker rmi ${dockerData.imageTag}`, {
-    silent: true
-  })
-  done.resolve()
-  return done.promise
+let deleteDockerImage = async () => {
+  await plugins.smartshell.exec(`docker rmi ${dockerData.imageTag}`)
 }
 
 /**
  * cleans up, deletes the build context
  */
-let deleteBuildContext = () => {
-  let done = plugins.q.defer()
-  plugins.smartfile.fs.remove(paths.buildContextDir)
-    .then(() => {
-      done.resolve()
-    })
-  return done.promise
+let deleteBuildContext = async () => {
+  await plugins.smartfile.fs.remove(paths.buildContextDir)
 }
 
-let preClean = () => {
-  let done = plugins.q.defer()
-  deleteDockerImage()
+let preClean = async () => {
+  await deleteDockerImage()
     .then(deleteDockerContainer)
-    .then(() => {
+    .then(async () => {
       plugins.beautylog.ok('ensured clean Docker environment!')
-      done.resolve()
     })
 }
 
-let postClean = () => {
-  let done = plugins.q.defer()
-  deleteDockerContainer()
+let postClean = async () => {
+  await deleteDockerContainer()
     .then(deleteDockerImage)
     .then(deleteBuildContext)
-    .then(() => {
+    .then(async () => {
       plugins.beautylog.ok('cleaned up!')
-      done.resolve()
     })
 }
 
 
 
-export let run = (configArg) => {
-  let done = plugins.q.defer()
+export let run = async (configArg: IConfig): Promise<IConfig> => {
+  plugins.beautylog.ora.start()
   config = configArg
-  checkDocker()
+  let resultConfig = await checkDocker()
     .then(preClean)
     .then(buildDockerFile)
     .then(buildDockerImage)
@@ -201,8 +160,6 @@ export let run = (configArg) => {
     .then(buildDockerSockString)
     .then(runDockerImage)
     .then(postClean)
-    .then(() => {
-      done.resolve(config);
-    }).catch(err => { console.log(err) })
-  return done.promise
+    .catch(err => { console.log(err) })
+  return config
 }

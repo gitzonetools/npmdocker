@@ -1,9 +1,17 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 const plugins = require("./npmdocker.plugins");
 const paths = require("./npmdocker.paths");
 ;
-let getQenvKeyValueObject = () => {
-    let done = plugins.q.defer();
+let getQenvKeyValueObject = () => __awaiter(this, void 0, void 0, function* () {
     let qenvKeyValueObjectArray;
     if (plugins.smartfile.fs.fileExistsSync(plugins.path.join(paths.cwd, 'qenv.yml'))) {
         qenvKeyValueObjectArray = new plugins.qenv.Qenv(paths.cwd, '.nogit/').keyValueObjectArray;
@@ -12,11 +20,9 @@ let getQenvKeyValueObject = () => {
         qenvKeyValueObjectArray = [];
     }
     ;
-    done.resolve(qenvKeyValueObjectArray);
-    return done.promise;
-};
-let buildConfig = (qenvKeyValueObjectArrayArg) => {
-    let done = plugins.q.defer();
+    return qenvKeyValueObjectArray;
+});
+let buildConfig = (qenvKeyValueObjectArrayArg) => __awaiter(this, void 0, void 0, function* () {
     let npmextra = new plugins.npmextra.Npmextra(paths.cwd);
     let config = npmextra.dataFor('npmdocker', {
         baseImage: 'hosttoday/ht-docker-node:npmts',
@@ -24,14 +30,10 @@ let buildConfig = (qenvKeyValueObjectArrayArg) => {
         dockerSock: false,
         keyValueObjectArray: qenvKeyValueObjectArrayArg
     });
-    done.resolve(config);
-    return done.promise;
-};
-exports.run = () => {
-    let done = plugins.q.defer();
-    getQenvKeyValueObject()
-        .then(buildConfig)
-        .then(done.resolve);
-    return done.promise;
-};
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnBtZG9ja2VyLmNvbmZpZy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3RzL25wbWRvY2tlci5jb25maWcudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBLCtDQUE4QztBQUM5QywyQ0FBMEM7QUFXekMsQ0FBQztBQUVGLElBQUkscUJBQXFCLEdBQUc7SUFDMUIsSUFBSSxJQUFJLEdBQUcsT0FBTyxDQUFDLENBQUMsQ0FBQyxLQUFLLEVBQUUsQ0FBQTtJQUM1QixJQUFJLHVCQUEwQyxDQUFBO0lBQzlDLEVBQUUsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxTQUFTLENBQUMsRUFBRSxDQUFDLGNBQWMsQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLFVBQVUsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQ2xGLHVCQUF1QixHQUFHLElBQUksT0FBTyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxTQUFTLENBQUMsQ0FBQyxtQkFBbUIsQ0FBQTtJQUMzRixDQUFDO0lBQUMsSUFBSSxDQUFDLENBQUM7UUFDTix1QkFBdUIsR0FBRyxFQUFFLENBQUE7SUFDOUIsQ0FBQztJQUFBLENBQUM7SUFDRixJQUFJLENBQUMsT0FBTyxDQUFDLHVCQUF1QixDQUFDLENBQUE7SUFDckMsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUE7QUFDckIsQ0FBQyxDQUFBO0FBRUQsSUFBSSxXQUFXLEdBQUcsQ0FBQywwQkFBMkM7SUFDNUQsSUFBSSxJQUFJLEdBQUcsT0FBTyxDQUFDLENBQUMsQ0FBQyxLQUFLLEVBQUUsQ0FBQTtJQUM1QixJQUFJLFFBQVEsR0FBRyxJQUFJLE9BQU8sQ0FBQyxRQUFRLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsQ0FBQTtJQUN2RCxJQUFJLE1BQU0sR0FBRyxRQUFRLENBQUMsT0FBTyxDQUMzQixXQUFXLEVBQ1g7UUFDRSxTQUFTLEVBQUUsZ0NBQWdDO1FBQzNDLE9BQU8sRUFBRSxVQUFVO1FBQ25CLFVBQVUsRUFBRSxLQUFLO1FBQ2pCLG1CQUFtQixFQUFFLDBCQUEwQjtLQUNoRCxDQUNGLENBQUE7SUFDRCxJQUFJLENBQUMsT0FBTyxDQUFDLE1BQU0sQ0FBQyxDQUFBO0lBQ3BCLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFBO0FBQ3JCLENBQUMsQ0FBQTtBQUVVLFFBQUEsR0FBRyxHQUFHO0lBQ2YsSUFBSSxJQUFJLEdBQUcsT0FBTyxDQUFDLENBQUMsQ0FBQyxLQUFLLEVBQUUsQ0FBQTtJQUM1QixxQkFBcUIsRUFBRTtTQUNwQixJQUFJLENBQUMsV0FBVyxDQUFDO1NBQ2pCLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUE7SUFDckIsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUE7QUFDckIsQ0FBQyxDQUFBIn0=
+    return config;
+});
+exports.run = () => __awaiter(this, void 0, void 0, function* () {
+    let config = yield getQenvKeyValueObject().then(buildConfig);
+    return config;
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnBtZG9ja2VyLmNvbmZpZy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3RzL25wbWRvY2tlci5jb25maWcudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7OztBQUFBLCtDQUE4QztBQUM5QywyQ0FBMEM7QUFXekMsQ0FBQztBQUVGLElBQUkscUJBQXFCLEdBQUc7SUFDMUIsSUFBSSx1QkFBMEMsQ0FBQTtJQUM5QyxFQUFFLENBQUMsQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUUsQ0FBQyxjQUFjLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxVQUFVLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUNsRix1QkFBdUIsR0FBRyxJQUFJLE9BQU8sQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxHQUFHLEVBQUUsU0FBUyxDQUFDLENBQUMsbUJBQW1CLENBQUE7SUFDM0YsQ0FBQztJQUFDLElBQUksQ0FBQyxDQUFDO1FBQ04sdUJBQXVCLEdBQUcsRUFBRSxDQUFBO0lBQzlCLENBQUM7SUFBQSxDQUFDO0lBQ0YsTUFBTSxDQUFDLHVCQUF1QixDQUFBO0FBQ2hDLENBQUMsQ0FBQSxDQUFBO0FBRUQsSUFBSSxXQUFXLEdBQUcsQ0FBTywwQkFBNkM7SUFDcEUsSUFBSSxRQUFRLEdBQUcsSUFBSSxPQUFPLENBQUMsUUFBUSxDQUFDLFFBQVEsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUE7SUFDdkQsSUFBSSxNQUFNLEdBQUcsUUFBUSxDQUFDLE9BQU8sQ0FDM0IsV0FBVyxFQUNYO1FBQ0UsU0FBUyxFQUFFLGdDQUFnQztRQUMzQyxPQUFPLEVBQUUsVUFBVTtRQUNuQixVQUFVLEVBQUUsS0FBSztRQUNqQixtQkFBbUIsRUFBRSwwQkFBMEI7S0FDaEQsQ0FDRixDQUFBO0lBQ0QsTUFBTSxDQUFDLE1BQU0sQ0FBQTtBQUNmLENBQUMsQ0FBQSxDQUFBO0FBRVUsUUFBQSxHQUFHLEdBQUc7SUFDZixJQUFJLE1BQU0sR0FBRyxNQUFNLHFCQUFxQixFQUFFLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxDQUFBO0lBQzVELE1BQU0sQ0FBQyxNQUFNLENBQUE7QUFDZixDQUFDLENBQUEsQ0FBQSJ9

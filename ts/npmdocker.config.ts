@@ -12,20 +12,17 @@ export interface IConfig {
   keyValueObjectArray: IKeyValueObject[]
 };
 
-let getQenvKeyValueObject = () => {
-  let done = plugins.q.defer()
+let getQenvKeyValueObject = async () => {
   let qenvKeyValueObjectArray: IKeyValueObject[]
   if (plugins.smartfile.fs.fileExistsSync(plugins.path.join(paths.cwd, 'qenv.yml'))) {
     qenvKeyValueObjectArray = new plugins.qenv.Qenv(paths.cwd, '.nogit/').keyValueObjectArray
   } else {
     qenvKeyValueObjectArray = []
   };
-  done.resolve(qenvKeyValueObjectArray)
-  return done.promise
+  return qenvKeyValueObjectArray
 }
 
-let buildConfig = (qenvKeyValueObjectArrayArg: IKeyValueObject) => {
-  let done = plugins.q.defer()
+let buildConfig = async (qenvKeyValueObjectArrayArg: IKeyValueObject[]) => {
   let npmextra = new plugins.npmextra.Npmextra(paths.cwd)
   let config = npmextra.dataFor<IConfig>(
     'npmdocker',
@@ -36,14 +33,10 @@ let buildConfig = (qenvKeyValueObjectArrayArg: IKeyValueObject) => {
       keyValueObjectArray: qenvKeyValueObjectArrayArg
     }
   )
-  done.resolve(config)
-  return done.promise
+  return config
 }
 
-export let run = () => {
-  let done = plugins.q.defer()
-  getQenvKeyValueObject()
-    .then(buildConfig)
-    .then(done.resolve)
-  return done.promise
+export let run = async (): Promise<IConfig> => {
+  let config = await getQenvKeyValueObject().then(buildConfig)
+  return config
 }

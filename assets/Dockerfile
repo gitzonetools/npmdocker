@@ -1,4 +1,4 @@
-FROM hosttoday/ht-docker-node:npmts
+FROM hosttoday/ht-docker-node:npmci
 COPY ./buildContextDir /workspace
 WORKDIR /workspace
 ENV CI=true

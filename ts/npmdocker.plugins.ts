@@ -5,9 +5,9 @@ import * as path from 'path'
 import * as projectinfo from 'projectinfo'
 import * as q from 'smartq'
 import * as qenv from 'qenv'
-import * as shelljs from 'shelljs'
 import * as smartcli from 'smartcli'
 import * as smartfile from 'smartfile'
+import * as smartshell from 'smartshell'
 import * as smartstring from 'smartstring'
 
 export {
@@ -17,8 +17,8 @@ export {
   projectinfo,
   q,
   qenv,
-  shelljs,
   smartcli,
   smartfile,
+  smartshell,
   smartstring
 }

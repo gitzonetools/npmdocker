@@ -6,4 +6,4 @@ export interface IConfig {
     exitCode?: number;
     keyValueObjectArray: IKeyValueObject[];
 }
-export declare let run: () => Promise<{}>;
+export declare let run: () => Promise<IConfig>;
