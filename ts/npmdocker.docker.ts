@@ -67,7 +67,11 @@ let buildDockerImage = async () => {
     }
     await plugins.smartshell.execSilent(
       `docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`
-    ).then(async () => {
+    ).then(async (response) => {
+      if (response.exitCode !== 0) {
+        console.log(response.stdout)
+        process.exit(1)
+      }
       plugins.beautylog.ok('Dockerimage built!')
     })
   })
@@ -119,7 +123,11 @@ let deleteDockerContainer = async () => {
  * cleans up deletes the test image
  */
 let deleteDockerImage = async () => {
-  await plugins.smartshell.exec(`docker rmi ${dockerData.imageTag}`)
+  await plugins.smartshell.execSilent(`docker rmi ${dockerData.imageTag}`).then(async (response) => {
+    if (response.exitCode !== 0) {
+      console.log(response.stdout)
+    }
+  })
 }
 
 /**

@@ -19,6 +19,17 @@ export let run = () => {
     }
   })
 
+  npmdockerCli.addCommand('runinside').then(async (argvArg) => {
+    plugins.beautylog.ok('Allright. We are now in Docker!')
+    plugins.beautylog.log('now trying to run your specified command')
+    let configArg = await ConfigModule.run()
+    await plugins.smartshell.exec(configArg.command).then(response => {
+      if (response.exitCode !== 0) {
+        process.exit(1)
+      }
+    })
+  })
+
   npmdockerCli.addCommand('clean').then(async (argvArg) => {
     plugins.beautylog.ora.start()
     plugins.beautylog.ora.text('cleaning up docker env...')
