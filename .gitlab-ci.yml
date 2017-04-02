@@ -6,6 +6,7 @@ stages:
 - test
 - release
 - trigger
+- pages
 
 test:
   stage: test
@@ -38,3 +39,18 @@ trigger:
     - docker
     - lossless
     - priv
+
+pages:
+  image: hosttoday/ht-docker-node:npmci
+  stage: pages
+  script:
+    - npmci command yarn global add npmpage
+    - npmci command npmpage
+  only:
+    - tags
+  tags:
+    - docker
+  artifacts:
+    expire_in: 1 week
+    paths:
+    - public
