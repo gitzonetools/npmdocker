@@ -27,8 +27,8 @@ let buildConfig = async (qenvKeyValueObjectArrayArg: IKeyValueObject[]) => {
   let config = npmextra.dataFor<IConfig>(
     'npmdocker',
     {
-      baseImage: 'hosttoday/ht-docker-node:npmts',
-      command: 'npm test',
+      baseImage: 'hosttoday/ht-docker-node:npmci',
+      command: 'npmci test stable',
       dockerSock: false,
       keyValueObjectArray: qenvKeyValueObjectArrayArg
     }

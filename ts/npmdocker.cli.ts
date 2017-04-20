@@ -14,7 +14,7 @@ export let run = () => {
     if (configArg.exitCode === 0) {
       plugins.beautylog.success('container ended all right!')
     } else {
-      plugins.beautylog.error('container ended with error!')
+      plugins.beautylog.error(`container ended with error! Exit Code is ${configArg.exitCode}`)
       process.exit(1)
     }
   })
