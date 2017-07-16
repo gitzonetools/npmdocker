@@ -24,6 +24,7 @@ let npmdockerCli = new plugins.smartcli.Smartcli()
 
 export let run = () => {
   npmdockerCli.standardTask().then(async (argvArg) => {
+    plugins.beautylog.figletSync('npmdocker')
     let configArg = await ConfigModule.run()
       .then(DockerModule.run)
     if (configArg.exitCode === 0) {
@@ -34,6 +35,9 @@ export let run = () => {
     }
   })
 
+  /**
+   * this command is executed inside docker and meant for use from outside docker
+   */
   npmdockerCli.addCommand('runinside').then(async (argvArg) => {
     plugins.beautylog.ok('Allright. We are now in Docker!')
     plugins.beautylog.log('now trying to run your specified command')
@@ -68,6 +72,7 @@ export let run = () => {
   })
 
   npmdockerCli.addCommand('speedtest').then(async (argvArg) => {
+    plugins.beautylog.figletSync('npmdocker')
     plugins.beautylog.ok('Starting speedtest')
     await plugins.smartshell.exec(`docker pull tianon/speedtest && docker run --rm tianon/speedtest`)
   })

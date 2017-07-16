@@ -35,16 +35,16 @@
   "devDependencies": {},
   "dependencies": {
     "@types/shelljs": "0.x.x",
-    "beautylog": "^6.1.5",
-    "npmextra": "^2.0.5",
+    "beautylog": "^6.1.10",
+    "npmextra": "^2.0.7",
     "projectinfo": "^3.0.2",
-    "qenv": "^1.1.3",
+    "qenv": "^1.1.7",
     "smartanalytics": "^1.0.6",
-    "smartcli": "^2.0.1",
-    "smartfile": "^4.1.9",
-    "smartq": "^1.1.1",
-    "smartshell": "^1.0.6",
+    "smartcli": "^2.0.7",
+    "smartfile": "^4.2.17",
+    "smartq": "^1.1.6",
+    "smartshell": "^1.0.8",
     "smartstring": "^2.0.24",
-    "typings-global": "^1.0.14"
+    "typings-global": "^1.0.19"
   }
 }
