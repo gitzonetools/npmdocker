@@ -3,10 +3,20 @@ services:
   - docker:dind
 
 stages:
+- mirror
 - test
 - release
 - trigger
 - pages
+
+mirror:
+  image: hosttoday/ht-docker-node:npmci
+  stage: mirror
+  script:
+    - npmci git mirror
+  tags:
+    - docker
+
 
 test:
   stage: test
