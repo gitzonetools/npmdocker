@@ -17,8 +17,14 @@ import * as DockerModule from './npmdocker.docker'
  * It is just an https call to Google Analytics.
  * Our privacy policy can be found here: https://lossless.gmbh/privacy.html
  */
-let npmdockerAnalytics = new plugins.smartanalytics.AnalyticsAccount('npmdocker','UA-64087619-5')
-npmdockerAnalytics.sendEvent('npm','exec','git.zone')
+let npmdockerAnalytics = new plugins.smartanalytics.Analytics({
+  apiEndPoint: 'https://pubapi.lossless.one',
+  appName: 'npmdocker',
+  projectId: 'gitzone'
+})
+npmdockerAnalytics.recordEvent('npmtoolexecution', {
+  somedata: 'somedata'
+})
 
 let npmdockerCli = new plugins.smartcli.Smartcli()
 
