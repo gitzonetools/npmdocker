@@ -36,15 +36,15 @@
   "dependencies": {
     "@types/shelljs": "0.x.x",
     "beautylog": "^6.1.10",
-    "npmextra": "^2.0.7",
-    "projectinfo": "^3.0.2",
+    "npmextra": "^2.0.9",
+    "projectinfo": "^3.0.4",
     "qenv": "^1.1.7",
-    "smartanalytics": "^1.0.6",
+    "smartanalytics": "^2.0.9",
     "smartcli": "^2.0.7",
-    "smartfile": "^4.2.17",
+    "smartfile": "^4.2.26",
     "smartq": "^1.1.6",
-    "smartshell": "^1.0.8",
+    "smartshell": "^1.0.18",
     "smartstring": "^2.0.24",
-    "typings-global": "^1.0.19"
+    "typings-global": "^1.0.20"
   }
 }

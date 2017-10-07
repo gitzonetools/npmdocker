@@ -11,7 +11,9 @@ stages:
 test:
   stage: test
   script:
-    - npmci test stable
+    - npmci node install stable
+    - npmci npm install
+    - npmci npm test
   tags:
     - docker
     - lossless
@@ -21,7 +23,8 @@ release:
   stage: release
   environment: npmjs-com_registry
   script:
-    - npmci publish
+    - npmci npm prepare
+    - npmci npm publish
   only:
     - tags
   tags:
