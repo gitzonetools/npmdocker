@@ -138,7 +138,7 @@ let postClean = async () => {
     .then(async () => {
       plugins.beautylog.ok('cleaned up!')
     })
-  await plugins.smartfile.fs.remove(paths.npmdockerFile)
+  plugins.smartfile.fs.removeSync(paths.npmdockerFile)
 }
 
 export let run = async (configArg: IConfig): Promise<IConfig> => {
