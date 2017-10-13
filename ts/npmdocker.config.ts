@@ -18,7 +18,7 @@ let getQenvKeyValueObject = async () => {
     qenvKeyValueObjectArray = new plugins.qenv.Qenv(paths.cwd, '.nogit/').keyValueObjectArray
   } else {
     qenvKeyValueObjectArray = []
-  };
+  }
   return qenvKeyValueObjectArray
 }
 

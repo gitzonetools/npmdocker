@@ -1,8 +1,7 @@
 {
     "npmts":{
         "mode":"default",
-        "cli":true,
-        "dockerSock":true
+        "cli":true
     },
     "npmci": {
         "npmGlobalTools": [

@@ -1,5 +1,5 @@
-import * as plugins from './npmdocker.plugins';
-import * as paths from './npmdocker.paths';
+import * as plugins from './npmdocker.plugins'
+import * as paths from './npmdocker.paths'
 import * as snippets from './npmdocker.snippets'
 
 // interfaces
@@ -45,8 +45,9 @@ let buildDockerFile = () => {
   })
   plugins.beautylog.info(`Base image is: ${config.baseImage}`)
   plugins.beautylog.info(`Command is: ${config.command}`)
-  plugins.smartfile.memory.toFsSync(dockerfile, paths.dockerfile)
+  plugins.smartfile.memory.toFsSync(dockerfile, plugins.path.join(paths.cwd, 'npmdocker'))
   plugins.beautylog.ok('Dockerfile created!')
+  plugins.beautylog.ora.stop()
   done.resolve()
   return done.promise
 }
@@ -55,26 +56,19 @@ let buildDockerFile = () => {
  * builds the Dockerimage from the built Dockerfile
  */
 let buildDockerImage = async () => {
-  plugins.beautylog.ora.text('pulling latest base image from registry...')
-  await plugins.smartshell.execSilent(
+  plugins.beautylog.info('pulling latest base image from registry...')
+  await plugins.smartshell.exec(
     `docker pull ${config.baseImage}`
-  ).then(async () => {
-    plugins.beautylog.ora.text('building Dockerimage...')
-    // are we creating a build context form project ?
-    if (process.env.CI === 'true') {
-      plugins.beautylog.ora.text('creating build context...')
-      plugins.smartfile.fs.copySync(paths.cwd, paths.buildContextDir)
-    }
-    await plugins.smartshell.execSilent(
-      `docker build -f ${paths.dockerfile} -t ${dockerData.imageTag} ${paths.assets}`
-    ).then(async (response) => {
-      if (response.exitCode !== 0) {
-        console.log(response.stdout)
-        process.exit(1)
-      }
-      plugins.beautylog.ok('Dockerimage built!')
-    })
-  })
+  )
+  plugins.beautylog.ora.text('building Dockerimage...')
+  let execResult = await plugins.smartshell.execSilent(
+    `docker build -f npmdocker -t ${dockerData.imageTag} ${paths.cwd}`
+  )
+  if (execResult.exitCode !== 0) {
+    console.log(execResult.stdout)
+    process.exit(1)
+  }
+  plugins.beautylog.ok('Dockerimage built!')
 }
 
 let buildDockerProjectMountString = async () => {
@@ -89,7 +83,7 @@ let buildDockerProjectMountString = async () => {
 let buildDockerEnvString = async () => {
   for (let keyValueObjectArg of config.keyValueObjectArray) {
     let envString = dockerData.dockerEnvString = dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `
-  };
+  }
 }
 
 /**
@@ -130,13 +124,6 @@ let deleteDockerImage = async () => {
   })
 }
 
-/**
- * cleans up, deletes the build context
- */
-let deleteBuildContext = async () => {
-  await plugins.smartfile.fs.remove(paths.buildContextDir)
-}
-
 let preClean = async () => {
   await deleteDockerImage()
     .then(deleteDockerContainer)
@@ -148,13 +135,11 @@ let preClean = async () => {
 let postClean = async () => {
   await deleteDockerContainer()
     .then(deleteDockerImage)
-    .then(deleteBuildContext)
     .then(async () => {
       plugins.beautylog.ok('cleaned up!')
     })
+  await plugins.smartfile.fs.remove(paths.npmdockerFile)
 }
-
-
 
 export let run = async (configArg: IConfig): Promise<IConfig> => {
   plugins.beautylog.ora.start()
