@@ -14,7 +14,6 @@ import * as DockerModule from './npmdocker.docker'
  * Since yarn is out and there is heavy caching going on,
  * pure download stats are just not reliable enough for us anymore
  * Feel free to dig into the smartanalytics package, if you are interested in how it works.
- * It is just an https call to Google Analytics.
  * Our privacy policy can be found here: https://lossless.gmbh/privacy.html
  */
 let npmdockerAnalytics = new plugins.smartanalytics.Analytics({
