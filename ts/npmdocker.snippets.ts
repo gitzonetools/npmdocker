@@ -1,25 +1,25 @@
-import * as plugins from "./npmdocker.plugins";
+import * as plugins from './npmdocker.plugins';
 
 export interface IDockerfileSnippet {
-  baseImage: string
-  command: string
+  baseImage: string;
+  command: string;
 }
 
 let getMountSolutionString = (optionsArg: IDockerfileSnippet) => {
   if (process.env.CI) {
-    return 'COPY ./ /workspace'
+    return 'COPY ./ /workspace';
   } else {
-    return '# not copying workspcae since not in CI'
+    return '# not copying workspcae since not in CI';
   }
-}
+};
 
 let getGlobalPreparationString = (optionsArg: IDockerfileSnippet) => {
   if (optionsArg.baseImage !== 'hosttoday/ht-docker-node:npmdocker') {
-    return 'RUN yarn global add npmdocker'
+    return 'RUN yarn global add npmdocker';
   } else {
-    return '# not installing npmdocker since it is included in the base image'
+    return '# not installing npmdocker since it is included in the base image';
   }
-}
+};
 
 export let dockerfileSnippet = (optionsArg: IDockerfileSnippet): string => {
   return plugins.smartstring.indent.normalize(
@@ -33,5 +33,5 @@ ENV CI=true
 ENTRYPOINT ["npmdocker"]
 CMD ["runinside"]
 `
-  )
-}
+  );
+};

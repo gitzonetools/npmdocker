@@ -1,11 +1,13 @@
 {
-    "npmts":{
-        "mode":"default",
-        "cli":true
-    },
-    "npmci": {
-        "npmGlobalTools": [
-            "npmts"
-        ]
-    }
+  "npmts": {
+    "mode": "default",
+    "cli": true
+  },
+  "npmci": {
+    "npmGlobalTools": [
+      "@gitzone/npmts",
+      "ts-node"
+    ],
+    "npmAccessLevel": "public"
+  }
 }

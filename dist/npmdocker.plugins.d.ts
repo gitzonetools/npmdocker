@@ -1,4 +1,3 @@
-import 'typings-global';
 import * as beautylog from 'beautylog';
 import * as npmextra from 'npmextra';
 import * as path from 'path';
