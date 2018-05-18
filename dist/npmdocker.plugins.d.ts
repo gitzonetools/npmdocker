@@ -5,7 +5,7 @@ import * as projectinfo from 'projectinfo';
 import * as q from 'smartq';
 import * as qenv from 'qenv';
 import * as smartanalytics from 'smartanalytics';
-import * as smartcli from 'smartcli';
+import * as smartcli from '@pushrocks/smartcli';
 import * as smartfile from 'smartfile';
 import * as smartshell from 'smartshell';
 import * as smartstring from 'smartstring';

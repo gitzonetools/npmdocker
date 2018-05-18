@@ -27,7 +27,7 @@ npmdockerAnalytics.recordEvent('npmtoolexecution', {
 let npmdockerCli = new plugins.smartcli.Smartcli();
 
 export let run = () => {
-  npmdockerCli.standardTask().then(async argvArg => {
+  npmdockerCli.standardTask().subscribe(async argvArg => {
     plugins.beautylog.figletSync('npmdocker');
     let configArg = await ConfigModule.run().then(DockerModule.run);
     if (configArg.exitCode === 0) {
@@ -41,7 +41,7 @@ export let run = () => {
   /**
    * this command is executed inside docker and meant for use from outside docker
    */
-  npmdockerCli.addCommand('runinside').then(async argvArg => {
+  npmdockerCli.addCommand('runinside').subscribe(async argvArg => {
     plugins.beautylog.ok('Allright. We are now in Docker!');
     plugins.beautylog.log('now trying to run your specified command');
     let configArg = await ConfigModule.run();
@@ -52,7 +52,7 @@ export let run = () => {
     });
   });
 
-  npmdockerCli.addCommand('clean').then(async argvArg => {
+  npmdockerCli.addCommand('clean').subscribe(async argvArg => {
     plugins.beautylog.ora.start();
     plugins.beautylog.ora.text('cleaning up docker env...');
     if (argvArg.all) {
@@ -74,7 +74,7 @@ export let run = () => {
     plugins.beautylog.ora.endOk('docker environment now is clean!');
   });
 
-  npmdockerCli.addCommand('speedtest').then(async argvArg => {
+  npmdockerCli.addCommand('speedtest').subscribe(async argvArg => {
     plugins.beautylog.figletSync('npmdocker');
     plugins.beautylog.ok('Starting speedtest');
     await plugins.smartshell.exec(
