@@ -15,7 +15,7 @@ let getMountSolutionString = (optionsArg: IDockerfileSnippet) => {
 
 let getGlobalPreparationString = (optionsArg: IDockerfileSnippet) => {
   if (optionsArg.baseImage !== 'hosttoday/ht-docker-node:npmdocker') {
-    return 'RUN yarn global add npmdocker';
+    return 'RUN npm install -g npmdocker';
   } else {
     return '# not installing npmdocker since it is included in the base image';
   }

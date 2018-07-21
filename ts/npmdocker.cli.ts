@@ -5,25 +5,6 @@ import * as paths from './npmdocker.paths';
 import * as ConfigModule from './npmdocker.config';
 import * as DockerModule from './npmdocker.docker';
 
-/**
- * smartanalytics
- * this data is fully anonymized (no Ips or any other personal information is tracked).
- * It just keeps track which of our tools are really used...
- * ... so we know where to spend our limited resources for improving them.
- * Since yarn is out and there is heavy caching going on,
- * pure download stats are just not reliable enough for us anymore
- * Feel free to dig into the smartanalytics package, if you are interested in how it works.
- * Our privacy policy can be found here: https://lossless.gmbh/privacy.html
- */
-let npmdockerAnalytics = new plugins.smartanalytics.Analytics({
-  apiEndPoint: 'https://pubapi.lossless.one',
-  appName: 'npmdocker',
-  projectId: 'gitzone'
-});
-npmdockerAnalytics.recordEvent('npmtoolexecution', {
-  somedata: 'somedata'
-});
-
 let npmdockerCli = new plugins.smartcli.Smartcli();
 
 export let run = () => {

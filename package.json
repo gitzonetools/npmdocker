@@ -5,17 +5,17 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "bin": {
-    "npmdocker": "dist/cli.js"
+    "npmdocker": "cli.js"
   },
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "(npm run clean && npm run compile && npm run setupCheck && npm run testStandard && npm run testSpeed)",
+    "test": "(npm run clean && npm run setupCheck && npm run testStandard && npm run testSpeed)",
     "build": "echo \"no build script required for now\"",
-    "testStandard": "(cd test/ && node ../dist/index.js)",
-    "testSpeed": "(cd test/ && node ../dist/index.js speedtest)",
-    "testClean": "(cd test/ && node ../dist/index.js clean --all)",
+    "testStandard": "(cd test/ && node ../cli.ts.js)",
+    "testSpeed": "(cd test/ && node ../cli.ts.js speedtest)",
+    "testClean": "(cd test/ && node ../cli.ts.js clean --all)",
     "clean": "(rm -rf test/)",
     "compile": "(npmts --notest)",
     "setupCheck": "(git clone https://gitlab.com/sandboxzone/sandbox-npmts.git test/)"
@@ -33,18 +33,20 @@
     "url": "https://gitlab.com/gitzone/npmdocker/issues"
   },
   "homepage": "https://gitlab.com/gitzone/npmdocker#README",
-  "devDependencies": {},
+  "devDependencies": {
+    "@gitzone/tsrun": "^1.1.9"
+  },
   "dependencies": {
-    "@pushrocks/smartcli": "^3.0.1",
-    "@types/shelljs": "0.x.x",
+    "@pushrocks/smartcli": "^3.0.2",
+    "@pushrocks/smartfile": "^6.0.3",
+    "@pushrocks/smartpromise": "^2.0.5",
+    "@pushrocks/smartshell": "^1.0.21",
+    "@types/shelljs": "^0.8.0",
     "beautylog": "^6.1.10",
     "npmextra": "^2.0.9",
     "projectinfo": "^3.0.4",
     "qenv": "^1.1.7",
     "smartanalytics": "^2.0.9",
-    "smartfile": "^4.2.26",
-    "smartq": "^1.1.6",
-    "smartshell": "^1.0.18",
-    "smartstring": "^2.0.24"
+    "smartstring": "^2.0.28"
   }
 }
