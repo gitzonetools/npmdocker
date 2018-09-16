@@ -2,7 +2,7 @@ import * as plugins from './npmdocker.plugins';
 import * as paths from './npmdocker.paths';
 
 // interfaces
-import { IKeyValueObject } from 'qenv';
+import { IKeyValueObject } from '@pushrocks/qenv';
 
 export interface IConfig {
   baseImage: string;

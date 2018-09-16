@@ -2,6 +2,10 @@ import * as plugins from './npmdocker.plugins';
 import * as paths from './npmdocker.paths';
 import * as snippets from './npmdocker.snippets';
 
+const smartshellInstance = new plugins.smartshell.Smartshell({
+  executor: 'bash'
+})
+
 // interfaces
 import { IConfig } from './npmdocker.config';
 
@@ -22,9 +26,10 @@ let dockerData = {
  * check if docker is available
  */
 let checkDocker = () => {
-  let done = plugins.q.defer();
+  let done = plugins.smartpromise.defer();
   plugins.beautylog.ora.text('checking docker...');
-  if (plugins.smartshell.which('docker')) {
+  
+  if (smartshellInstance.exec('which docker')) {
     plugins.beautylog.ok('Docker found!');
     done.resolve();
   } else {
@@ -37,7 +42,7 @@ let checkDocker = () => {
  * builds the Dockerfile according to the config in the project
  */
 let buildDockerFile = () => {
-  let done = plugins.q.defer();
+  let done = plugins.smartpromise.defer();
   plugins.beautylog.ora.text('building Dockerfile...');
   let dockerfile: string = snippets.dockerfileSnippet({
     baseImage: config.baseImage,
@@ -57,9 +62,9 @@ let buildDockerFile = () => {
  */
 let buildDockerImage = async () => {
   plugins.beautylog.info('pulling latest base image from registry...');
-  await plugins.smartshell.exec(`docker pull ${config.baseImage}`);
+  await smartshellInstance.exec(`docker pull ${config.baseImage}`);
   plugins.beautylog.ora.text('building Dockerimage...');
-  let execResult = await plugins.smartshell.execSilent(
+  let execResult = await smartshellInstance.execSilent(
     `docker build -f npmdocker -t ${dockerData.imageTag} ${paths.cwd}`
   );
   if (execResult.exitCode !== 0) {
@@ -98,11 +103,11 @@ let buildDockerSockString = async () => {
  * creates a container by running the built Dockerimage
  */
 let runDockerImage = async () => {
-  let done = plugins.q.defer();
+  let done = plugins.smartpromise.defer();
   plugins.beautylog.ora.text('starting Container...');
   plugins.beautylog.ora.end();
   plugins.beautylog.log('now running Dockerimage');
-  config.exitCode = (await plugins.smartshell.exec(
+  config.exitCode = (await smartshellInstance.exec(
     `docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${
       dockerData.dockerEnvString
     } --name ${dockerData.containerName} ${dockerData.imageTag}`
@@ -113,14 +118,14 @@ let runDockerImage = async () => {
  * cleans up: deletes the test container
  */
 let deleteDockerContainer = async () => {
-  await plugins.smartshell.execSilent(`docker rm -f ${dockerData.containerName}`);
+  await smartshellInstance.execSilent(`docker rm -f ${dockerData.containerName}`);
 };
 
 /**
  * cleans up deletes the test image
  */
 let deleteDockerImage = async () => {
-  await plugins.smartshell.execSilent(`docker rmi ${dockerData.imageTag}`).then(async response => {
+  await smartshellInstance.execSilent(`docker rmi ${dockerData.imageTag}`).then(async response => {
     if (response.exitCode !== 0) {
       console.log(response.stdout);
     }

@@ -7,12 +7,9 @@
   "bin": {
     "npmdocker": "cli.js"
   },
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "(npm run clean && npm run setupCheck && npm run testStandard && npm run testSpeed)",
-    "build": "echo \"no build script required for now\"",
+    "build": "tsbuild",
     "testStandard": "(cd test/ && node ../cli.ts.js)",
     "testSpeed": "(cd test/ && node ../cli.ts.js speedtest)",
     "testClean": "(cd test/ && node ../cli.ts.js clean --all)",
@@ -34,19 +31,24 @@
   },
   "homepage": "https://gitlab.com/gitzone/npmdocker#README",
   "devDependencies": {
-    "@gitzone/tsrun": "^1.1.9"
+    "@gitzone/tsbuild": "^2.0.22",
+    "@gitzone/tsrun": "^1.1.12",
+    "@gitzone/tstest": "^1.0.15",
+    "@pushrocks/tapbundle": "^3.0.7",
+    "@types/node": "^10.9.4"
   },
   "dependencies": {
-    "@pushrocks/smartcli": "^3.0.2",
-    "@pushrocks/smartfile": "^6.0.3",
+    "@pushrocks/npmextra": "^3.0.1",
+    "@pushrocks/projectinfo": "^4.0.2",
+    "@pushrocks/qenv": "^2.0.2",
+    "@pushrocks/smartcli": "^3.0.4",
+    "@pushrocks/smartfile": "^6.0.8",
     "@pushrocks/smartpromise": "^2.0.5",
-    "@pushrocks/smartshell": "^1.0.21",
+    "@pushrocks/smartshell": "^2.0.6",
+    "@pushrocks/smartstring": "^3.0.4",
     "@types/shelljs": "^0.8.0",
     "beautylog": "^6.1.10",
-    "npmextra": "^2.0.9",
-    "projectinfo": "^3.0.4",
-    "qenv": "^1.1.7",
-    "smartanalytics": "^2.0.9",
-    "smartstring": "^2.0.28"
-  }
+    "smartanalytics": "^2.0.9"
+  },
+  "private": true
 }

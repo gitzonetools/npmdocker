@@ -26,7 +26,10 @@ export let run = () => {
     plugins.beautylog.ok('Allright. We are now in Docker!');
     plugins.beautylog.log('now trying to run your specified command');
     let configArg = await ConfigModule.run();
-    await plugins.smartshell.exec(configArg.command).then(response => {
+    const smartshellInstance = new plugins.smartshell.Smartshell({
+      executor: 'bash'
+    })
+    await smartshellInstance.exec(configArg.command).then(response => {
       if (response.exitCode !== 0) {
         process.exit(1);
       }
@@ -37,28 +40,34 @@ export let run = () => {
     plugins.beautylog.ora.start();
     plugins.beautylog.ora.text('cleaning up docker env...');
     if (argvArg.all) {
+      const smartshellInstance = new plugins.smartshell.Smartshell({
+        executor: 'bash'
+      })
       plugins.beautylog.ora.text('killing any running docker containers...');
-      await plugins.smartshell.exec(`docker kill $(docker ps -q)`);
+      await smartshellInstance.exec(`docker kill $(docker ps -q)`);
 
       plugins.beautylog.ora.text('removing stopped containers...');
-      await plugins.smartshell.exec(`docker rm $(docker ps -a -q)`);
+      await smartshellInstance.exec(`docker rm $(docker ps -a -q)`);
 
       plugins.beautylog.ora.text('removing images...');
-      await plugins.smartshell.exec(`docker rmi $(docker images -q -f dangling=true)`);
+      await smartshellInstance.exec(`docker rmi $(docker images -q -f dangling=true)`);
 
       plugins.beautylog.ora.text('removing all other images...');
-      await plugins.smartshell.exec(`docker rmi $(docker images -a -q)`);
+      await smartshellInstance.exec(`docker rmi $(docker images -a -q)`);
 
       plugins.beautylog.ora.text('removing all volumes...');
-      await plugins.smartshell.exec(`docker volume rm $(docker volume ls -f dangling=true -q)`);
+      await smartshellInstance.exec(`docker volume rm $(docker volume ls -f dangling=true -q)`);
     }
     plugins.beautylog.ora.endOk('docker environment now is clean!');
   });
 
   npmdockerCli.addCommand('speedtest').subscribe(async argvArg => {
+    const smartshellInstance = new plugins.smartshell.Smartshell({
+      executor: 'bash'
+    })
     plugins.beautylog.figletSync('npmdocker');
     plugins.beautylog.ok('Starting speedtest');
-    await plugins.smartshell.exec(
+    await smartshellInstance.exec(
       `docker pull tianon/speedtest && docker run --rm tianon/speedtest`
     );
   });
