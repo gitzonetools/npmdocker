@@ -1,6 +1,7 @@
 {
   "name": "@gitzone/npmdocker",
   "version": "1.2.23",
+  "private": false,
   "description": "develop npm modules cross platform with docker",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -49,6 +50,5 @@
     "@types/shelljs": "^0.8.0",
     "beautylog": "^6.1.10",
     "smartanalytics": "^2.0.9"
-  },
-  "private": true
+  }
 }
