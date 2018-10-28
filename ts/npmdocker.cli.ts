@@ -50,7 +50,7 @@ export let run = () => {
       await smartshellInstance.exec(`docker rm $(docker ps -a -q)`);
 
       plugins.beautylog.ora.text('removing images...');
-      await smartshellInstance.exec(`docker rmi $(docker images -q -f dangling=true)`);
+      await smartshellInstance.exec(`docker rmi -f $(docker images -q -f dangling=true)`);
 
       plugins.beautylog.ora.text('removing all other images...');
       await smartshellInstance.exec(`docker rmi $(docker images -a -q)`);
