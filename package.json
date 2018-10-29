@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "(npm run clean && npm run setupCheck && npm run testStandard && npm run testSpeed)",
-    "build": "tsbuild",
+    "build": "(tsbuild)",
     "testStandard": "(cd test/ && node ../cli.ts.js)",
     "testSpeed": "(cd test/ && node ../cli.ts.js speedtest)",
     "testClean": "(cd test/ && node ../cli.ts.js clean --all)",
