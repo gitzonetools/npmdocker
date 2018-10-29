@@ -4,7 +4,7 @@ import * as snippets from './npmdocker.snippets';
 
 const smartshellInstance = new plugins.smartshell.Smartshell({
   executor: 'bash'
-})
+});
 
 // interfaces
 import { IConfig } from './npmdocker.config';
@@ -28,7 +28,7 @@ let dockerData = {
 let checkDocker = () => {
   let done = plugins.smartpromise.defer();
   plugins.beautylog.ora.text('checking docker...');
-  
+
   if (smartshellInstance.exec('which docker')) {
     plugins.beautylog.ok('Docker found!');
     done.resolve();
@@ -74,7 +74,7 @@ let buildDockerImage = async () => {
   plugins.beautylog.ok('Dockerimage built!');
 };
 
-let buildDockerProjectMountString = async () => {
+const buildDockerProjectMountString = async () => {
   if (process.env.CI !== 'true') {
     dockerData.dockerProjectMountString = `-v ${paths.cwd}:/workspace`;
   }
@@ -83,7 +83,7 @@ let buildDockerProjectMountString = async () => {
 /**
  * builds an environment string that docker cli understands
  */
-let buildDockerEnvString = async () => {
+const buildDockerEnvString = async () => {
   for (let keyValueObjectArg of config.keyValueObjectArray) {
     let envString = (dockerData.dockerEnvString =
       dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `);
@@ -93,7 +93,7 @@ let buildDockerEnvString = async () => {
 /**
  * creates string to mount the docker.sock inside the testcontainer
  */
-let buildDockerSockString = async () => {
+const buildDockerSockString = async () => {
   if (config.dockerSock) {
     dockerData.dockerSockString = `-v /var/run/docker.sock:/var/run/docker.sock`;
   }

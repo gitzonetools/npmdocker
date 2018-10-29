@@ -36,19 +36,21 @@
     "@gitzone/tsrun": "^1.1.13",
     "@gitzone/tstest": "^1.0.15",
     "@pushrocks/tapbundle": "^3.0.7",
-    "@types/node": "^10.12.0"
+    "@types/node": "^10.12.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0"
   },
   "dependencies": {
     "@pushrocks/npmextra": "^3.0.1",
     "@pushrocks/projectinfo": "^4.0.2",
     "@pushrocks/qenv": "^2.0.2",
+    "@pushrocks/smartanalytics": "^2.0.15",
     "@pushrocks/smartcli": "^3.0.6",
     "@pushrocks/smartfile": "^6.0.8",
     "@pushrocks/smartpromise": "^2.0.5",
     "@pushrocks/smartshell": "^2.0.8",
     "@pushrocks/smartstring": "^3.0.4",
     "@types/shelljs": "^0.8.0",
-    "beautylog": "^6.1.10",
-    "smartanalytics": "^2.0.9"
+    "beautylog": "^6.1.10"
   }
 }

@@ -28,7 +28,7 @@ export let run = () => {
     let configArg = await ConfigModule.run();
     const smartshellInstance = new plugins.smartshell.Smartshell({
       executor: 'bash'
-    })
+    });
     await smartshellInstance.exec(configArg.command).then(response => {
       if (response.exitCode !== 0) {
         process.exit(1);
@@ -42,7 +42,7 @@ export let run = () => {
     if (argvArg.all) {
       const smartshellInstance = new plugins.smartshell.Smartshell({
         executor: 'bash'
-      })
+      });
       plugins.beautylog.ora.text('killing any running docker containers...');
       await smartshellInstance.exec(`docker kill $(docker ps -q)`);
 
@@ -64,7 +64,7 @@ export let run = () => {
   npmdockerCli.addCommand('speedtest').subscribe(async argvArg => {
     const smartshellInstance = new plugins.smartshell.Smartshell({
       executor: 'bash'
-    })
+    });
     plugins.beautylog.figletSync('npmdocker');
     plugins.beautylog.ok('Starting speedtest');
     await smartshellInstance.exec(
