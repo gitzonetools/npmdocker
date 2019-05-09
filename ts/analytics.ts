@@ -10,7 +10,7 @@
  * Your Open Source team at Lossless GmbH :)
  */
 import * as smartanalytics from '@pushrocks/smartanalytics';
-let npmdockerAnalytics = new smartanalytics.Analytics({
+const npmdockerAnalytics = new smartanalytics.Analytics({
   apiEndPoint: 'https://pubapi.lossless.one',
   appName: 'npmdocker',
   projectId: 'gitzone'

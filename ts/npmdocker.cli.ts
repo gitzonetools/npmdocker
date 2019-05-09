@@ -9,7 +9,6 @@ let npmdockerCli = new plugins.smartcli.Smartcli();
 
 export let run = () => {
   npmdockerCli.standardTask().subscribe(async argvArg => {
-    plugins.beautylog.figletSync('npmdocker');
     let configArg = await ConfigModule.run().then(DockerModule.run);
     if (configArg.exitCode === 0) {
       plugins.beautylog.success('container ended all right!');
