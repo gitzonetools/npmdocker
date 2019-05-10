@@ -10,7 +10,7 @@ export interface IConfig {
 }
 
 const getQenvKeyValueObject = async () => {
-  let qenvKeyValueObjectArray: {[key: string]: string | number};
+  let qenvKeyValueObjectArray: { [key: string]: string | number };
   if (plugins.smartfile.fs.fileExistsSync(plugins.path.join(paths.cwd, 'qenv.yml'))) {
     qenvKeyValueObjectArray = new plugins.qenv.Qenv(paths.cwd, '.nogit/').keyValueObject;
   } else {
@@ -19,7 +19,7 @@ const getQenvKeyValueObject = async () => {
   return qenvKeyValueObjectArray;
 };
 
-const buildConfig = async (qenvKeyValueObjectArg: {[key: string]: string | number}) => {
+const buildConfig = async (qenvKeyValueObjectArg: { [key: string]: string | number }) => {
   const npmextra = new plugins.npmextra.Npmextra(paths.cwd);
   const config = npmextra.dataFor<IConfig>('npmdocker', {
     baseImage: 'hosttoday/ht-docker-node:npmdocker',

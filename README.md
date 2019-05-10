@@ -1,25 +1,20 @@
-# npmdocker
-
+# @gitzone/npmdocker
 develop npm modules cross platform with docker
 
-## Availabililty
-
-[![npm](https://gitzone.gitlab.io/assets/repo-button-npm.svg)](https://www.npmjs.com/package/npmdocker)
-[![git](https://gitzone.gitlab.io/assets/repo-button-git.svg)](https://GitLab.com/gitzone/npmdocker)
-[![git](https://gitzone.gitlab.io/assets/repo-button-mirror.svg)](https://github.com/gitzone/npmdocker)
-[![docs](https://gitzone.gitlab.io/assets/repo-button-docs.svg)](https://gitzone.gitlab.io/npmdocker/)
+## Availabililty and Links
+* [npmjs.org (npm package)](https://www.npmjs.com/package/@gitzone/npmdocker)
+* [gitlab.com (source)](https://gitlab.com/gitzone/npmdocker)
+* [github.com (source mirror)](https://github.com/gitzone/npmdocker)
+* [docs (typedoc)](https://gitzone.gitlab.io/npmdocker/)
 
 ## Status for master
-
-[![build status](https://GitLab.com/gitzone/npmdocker/badges/master/build.svg)](https://GitLab.com/gitzone/npmdocker/commits/master)
-[![coverage report](https://GitLab.com/gitzone/npmdocker/badges/master/coverage.svg)](https://GitLab.com/gitzone/npmdocker/commits/master)
-[![npm downloads per month](https://img.shields.io/npm/dm/npmdocker.svg)](https://www.npmjs.com/package/npmdocker)
-[![Dependency Status](https://david-dm.org/gitzonetools/npmdocker.svg)](https://david-dm.org/gitzonetools/npmdocker)
-[![bitHound Dependencies](https://www.bithound.io/github/gitzonetools/npmdocker/badges/dependencies.svg)](https://www.bithound.io/github/gitzonetools/npmdocker/master/dependencies/npm)
-[![bitHound Code](https://www.bithound.io/github/gitzonetools/npmdocker/badges/code.svg)](https://www.bithound.io/github/gitzonetools/npmdocker)
-[![TypeScript](https://img.shields.io/badge/TypeScript-2.x-blue.svg)](https://nodejs.org/dist/latest-v6.x/docs/api/)
-[![node](https://img.shields.io/badge/node->=%206.x.x-blue.svg)](https://nodejs.org/dist/latest-v6.x/docs/api/)
-[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![build status](https://gitlab.com/gitzone/npmdocker/badges/master/build.svg)](https://gitlab.com/gitzone/npmdocker/commits/master)
+[![coverage report](https://gitlab.com/gitzone/npmdocker/badges/master/coverage.svg)](https://gitlab.com/gitzone/npmdocker/commits/master)
+[![npm downloads per month](https://img.shields.io/npm/dm/@gitzone/npmdocker.svg)](https://www.npmjs.com/package/@gitzone/npmdocker)
+[![Known Vulnerabilities](https://snyk.io/test/npm/@gitzone/npmdocker/badge.svg)](https://snyk.io/test/npm/@gitzone/npmdocker)
+[![TypeScript](https://img.shields.io/badge/TypeScript->=%203.x-blue.svg)](https://nodejs.org/dist/latest-v10.x/docs/api/)
+[![node](https://img.shields.io/badge/node->=%2010.x.x-blue.svg)](https://nodejs.org/dist/latest-v10.x/docs/api/)
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-prettier-ff69b4.svg)](https://prettier.io/)
 
 ## Usage
 
@@ -34,10 +29,10 @@ Usually this is the default i CI, but locally behaviour tends to defer.
 
 The npmdocker package works in everywhere where the docker cli is available. e.g.:
 
-* docker toolbox
-* native docker application
-* docker in docker
-* mounted docker.sock
+- docker toolbox
+- native docker application
+- docker in docker
+- mounted docker.sock
 
 ### How do I use it?
 
@@ -62,6 +57,6 @@ create a npmextra.json in the project's root directory
 For further information read the linked docs at the top of this readme.
 
 > MIT licensed | **&copy;** [Lossless GmbH](https://lossless.gmbh)
-> | By using this npm module you agree to our [privacy policy](https://lossless.gmbH/privacy.html)
+| By using this npm module you agree to our [privacy policy](https://lossless.gmbH/privacy.html)
 
-[![repo-footer](https://gitzone.gitlab.io/assets/repo-footer.svg)](https://git.zone)
+[![repo-footer](https://gitzone.gitlab.io/assets/repo-footer.svg)](https://maintainedby.lossless.com)

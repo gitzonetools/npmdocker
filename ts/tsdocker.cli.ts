@@ -78,7 +78,9 @@ export let run = () => {
     });
     logger.log('ok', `Starting vscode in cwd ${paths.cwd}`);
     await smartshellInstance.execAndWaitForLine(
-      `docker run -p 127.0.0.1:8443:8443 -v "${paths.cwd}:/home/coder/project" registry.gitlab.com/hosttoday/ht-docker-vscode --allow-http --no-auth`,
+      `docker run -p 127.0.0.1:8443:8443 -v "${
+        paths.cwd
+      }:/home/coder/project" registry.gitlab.com/hosttoday/ht-docker-vscode --allow-http --no-auth`,
       /Connected to shared process/
     );
     await plugins.smartopen.openUrl('testing-vscode.git.zone:8443');
