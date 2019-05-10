@@ -1,5 +1,5 @@
 import './analytics';
-import * as plugins from './npmdocker.plugins';
-import * as cli from './npmdocker.cli';
+import * as plugins from './tsdocker.plugins';
+import * as cli from './tsdocker.cli';
 
 cli.run();

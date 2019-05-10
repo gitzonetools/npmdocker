@@ -1,4 +1,4 @@
-import * as plugins from './npmdocker.plugins';
+import * as plugins from './tsdocker.plugins';
 
 // directories
 export let cwd = process.cwd();

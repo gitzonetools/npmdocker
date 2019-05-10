@@ -4,7 +4,14 @@
     "semicolon": [true, "always"],
     "no-console": false,
     "ordered-imports": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "member-ordering": {
+      "options":{
+        "order": [
+          "static-method"
+        ]
+      }
+    }
   },
   "defaultSeverity": "warning"
 }

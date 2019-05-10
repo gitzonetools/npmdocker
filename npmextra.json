@@ -6,5 +6,15 @@
   "npmci": {
     "npmGlobalTools": [],
     "npmAccessLevel": "public"
+  },
+  "gitzone": {
+    "module": {
+      "githost": "gitlab.com",
+      "gitscope": "gitzone",
+      "gitrepo": "npmdocker",
+      "shortDescription": "develop npm modules cross platform with docker",
+      "npmPackagename": "@gitzone/npmdocker",
+      "license": "MIT"
+    }
   }
 }

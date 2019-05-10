@@ -1,20 +1,22 @@
-import * as plugins from './npmdocker.plugins';
-import * as paths from './npmdocker.paths';
-import * as snippets from './npmdocker.snippets';
+import * as plugins from './tsdocker.plugins';
+import * as paths from './tsdocker.paths';
+import * as snippets from './tsdocker.snippets';
+
+import { logger, ora } from './tsdocker.logging';
 
 const smartshellInstance = new plugins.smartshell.Smartshell({
   executor: 'bash'
 });
 
 // interfaces
-import { IConfig } from './npmdocker.config';
+import { IConfig } from './tsdocker.config';
 
 let config: IConfig;
 
 /**
  * the docker data used to build the internal testing container
  */
-let dockerData = {
+const dockerData = {
   imageTag: 'npmdocker-temp-image:latest',
   containerName: 'npmdocker-temp-container',
   dockerProjectMountString: '',
@@ -25,12 +27,12 @@ let dockerData = {
 /**
  * check if docker is available
  */
-let checkDocker = () => {
-  let done = plugins.smartpromise.defer();
-  plugins.beautylog.ora.text('checking docker...');
+const checkDocker = () => {
+  const done = plugins.smartpromise.defer();
+  ora.text('checking docker...');
 
   if (smartshellInstance.exec('which docker')) {
-    plugins.beautylog.ok('Docker found!');
+    logger.log('ok', 'Docker found!');
     done.resolve();
   } else {
     done.reject(new Error('docker not found on this machine'));
@@ -41,18 +43,18 @@ let checkDocker = () => {
 /**
  * builds the Dockerfile according to the config in the project
  */
-let buildDockerFile = () => {
-  let done = plugins.smartpromise.defer();
-  plugins.beautylog.ora.text('building Dockerfile...');
-  let dockerfile: string = snippets.dockerfileSnippet({
+const buildDockerFile = () => {
+  const done = plugins.smartpromise.defer();
+  ora.text('building Dockerfile...');
+  const dockerfile: string = snippets.dockerfileSnippet({
     baseImage: config.baseImage,
     command: config.command
   });
-  plugins.beautylog.info(`Base image is: ${config.baseImage}`);
-  plugins.beautylog.info(`Command is: ${config.command}`);
+  logger.log('info', `Base image is: ${config.baseImage}`);
+  logger.log('info', `Command is: ${config.command}`);
   plugins.smartfile.memory.toFsSync(dockerfile, plugins.path.join(paths.cwd, 'npmdocker'));
-  plugins.beautylog.ok('Dockerfile created!');
-  plugins.beautylog.ora.stop();
+  logger.log('ok', 'Dockerfile created!');
+  ora.stop();
   done.resolve();
   return done.promise;
 };
@@ -60,18 +62,18 @@ let buildDockerFile = () => {
 /**
  * builds the Dockerimage from the built Dockerfile
  */
-let buildDockerImage = async () => {
-  plugins.beautylog.info('pulling latest base image from registry...');
+const buildDockerImage = async () => {
+  logger.log('info', 'pulling latest base image from registry...');
   await smartshellInstance.exec(`docker pull ${config.baseImage}`);
-  plugins.beautylog.ora.text('building Dockerimage...');
-  let execResult = await smartshellInstance.execSilent(
+  ora.text('building Dockerimage...');
+  const execResult = await smartshellInstance.execSilent(
     `docker build -f npmdocker -t ${dockerData.imageTag} ${paths.cwd}`
   );
   if (execResult.exitCode !== 0) {
     console.log(execResult.stdout);
     process.exit(1);
   }
-  plugins.beautylog.ok('Dockerimage built!');
+  logger.log('ok', 'Dockerimage built!');
 };
 
 const buildDockerProjectMountString = async () => {
@@ -84,9 +86,9 @@ const buildDockerProjectMountString = async () => {
  * builds an environment string that docker cli understands
  */
 const buildDockerEnvString = async () => {
-  for (let keyValueObjectArg of config.keyValueObjectArray) {
-    let envString = (dockerData.dockerEnvString =
-      dockerData.dockerEnvString + `-e ${keyValueObjectArg.key}=${keyValueObjectArg.value} `);
+  for (const key of Object.keys(config.keyValueObject)) {
+    const envString = (dockerData.dockerEnvString =
+      dockerData.dockerEnvString + `-e ${key}=${config.keyValueObject[key]} `);
   }
 };
 
@@ -102,11 +104,11 @@ const buildDockerSockString = async () => {
 /**
  * creates a container by running the built Dockerimage
  */
-let runDockerImage = async () => {
-  let done = plugins.smartpromise.defer();
-  plugins.beautylog.ora.text('starting Container...');
-  plugins.beautylog.ora.end();
-  plugins.beautylog.log('now running Dockerimage');
+const runDockerImage = async () => {
+  const done = plugins.smartpromise.defer();
+  ora.text('starting Container...');
+  ora.stop();
+  logger.log('info', 'now running Dockerimage');
   config.exitCode = (await smartshellInstance.exec(
     `docker run ${dockerData.dockerProjectMountString} ${dockerData.dockerSockString} ${
       dockerData.dockerEnvString
@@ -117,14 +119,14 @@ let runDockerImage = async () => {
 /**
  * cleans up: deletes the test container
  */
-let deleteDockerContainer = async () => {
+const deleteDockerContainer = async () => {
   await smartshellInstance.execSilent(`docker rm -f ${dockerData.containerName}`);
 };
 
 /**
  * cleans up deletes the test image
  */
-let deleteDockerImage = async () => {
+const deleteDockerImage = async () => {
   await smartshellInstance.execSilent(`docker rmi ${dockerData.imageTag}`).then(async response => {
     if (response.exitCode !== 0) {
       console.log(response.stdout);
@@ -132,27 +134,26 @@ let deleteDockerImage = async () => {
   });
 };
 
-let preClean = async () => {
+const preClean = async () => {
   await deleteDockerImage()
     .then(deleteDockerContainer)
     .then(async () => {
-      plugins.beautylog.ok('ensured clean Docker environment!');
+      logger.log('ok', 'ensured clean Docker environment!');
     });
 };
 
-let postClean = async () => {
+const postClean = async () => {
   await deleteDockerContainer()
     .then(deleteDockerImage)
     .then(async () => {
-      plugins.beautylog.ok('cleaned up!');
+      logger.log('ok', 'cleaned up!');
     });
   plugins.smartfile.fs.removeSync(paths.npmdockerFile);
 };
 
 export let run = async (configArg: IConfig): Promise<IConfig> => {
-  plugins.beautylog.ora.start();
   config = configArg;
-  let resultConfig = await checkDocker()
+  const resultConfig = await checkDocker()
     .then(preClean)
     .then(buildDockerFile)
     .then(buildDockerImage)

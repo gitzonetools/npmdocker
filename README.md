@@ -59,7 +59,7 @@ create a npmextra.json in the project's root directory
 | command     | the cli command to run within the the project's directory inside the docker container |
 | dockersSock | wether or not the testcontainer will have access to the docker.sock of the host       |
 
-For further information read the linked docs at the top of this README.
+For further information read the linked docs at the top of this readme.
 
 > MIT licensed | **&copy;** [Lossless GmbH](https://lossless.gmbh)
 > | By using this npm module you agree to our [privacy policy](https://lossless.gmbH/privacy.html)

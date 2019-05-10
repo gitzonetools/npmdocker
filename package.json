@@ -1,5 +1,5 @@
 {
-  "name": "@gitzone/npmdocker",
+  "name": "@gitzone/tsdocker",
   "version": "1.2.28",
   "private": false,
   "description": "develop npm modules cross platform with docker",
@@ -14,6 +14,7 @@
     "testStandard": "(cd test/ && node ../cli.ts.js)",
     "testSpeed": "(cd test/ && node ../cli.ts.js speedtest)",
     "testClean": "(cd test/ && node ../cli.ts.js clean --all)",
+    "testVscode": "(cd test/ && node ../cli.ts.js vscode)",
     "clean": "(rm -rf test/)",
     "compile": "(npmts --notest)",
     "setupCheck": "(git clone https://gitlab.com/sandboxzone/sandbox-npmts.git test/)"
@@ -47,6 +48,10 @@
     "@pushrocks/smartanalytics": "^2.0.15",
     "@pushrocks/smartcli": "^3.0.7",
     "@pushrocks/smartfile": "^7.0.2",
+    "@pushrocks/smartlog": "^2.0.19",
+    "@pushrocks/smartlog-destination-local": "^7.0.5",
+    "@pushrocks/smartlog-source-ora": "^1.0.4",
+    "@pushrocks/smartopen": "^1.0.8",
     "@pushrocks/smartpromise": "^3.0.2",
     "@pushrocks/smartshell": "^2.0.13",
     "@pushrocks/smartstring": "^3.0.10",

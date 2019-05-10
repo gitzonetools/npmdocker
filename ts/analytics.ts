@@ -12,7 +12,7 @@
 import * as smartanalytics from '@pushrocks/smartanalytics';
 const npmdockerAnalytics = new smartanalytics.Analytics({
   apiEndPoint: 'https://pubapi.lossless.one',
-  appName: 'npmdocker',
+  appName: 'tsdocker',
   projectId: 'gitzone'
 });
 npmdockerAnalytics.recordEvent('npmtoolexecution', {
