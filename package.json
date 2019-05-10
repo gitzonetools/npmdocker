@@ -42,7 +42,7 @@
     "tslint-config-prettier": "^1.18.0"
   },
   "dependencies": {
-    "@pushrocks/npmextra": "^3.0.1",
+    "@pushrocks/npmextra": "^3.0.3",
     "@pushrocks/projectinfo": "^4.0.2",
     "@pushrocks/qenv": "^4.0.0",
     "@pushrocks/smartanalytics": "^2.0.15",
