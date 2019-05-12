@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "bin": {
-    "npmdocker": "cli.js"
+    "tsdocker": "cli.js"
   },
   "scripts": {
     "test": "(npm run clean && npm run setupCheck && npm run testStandard && npm run testSpeed)",
