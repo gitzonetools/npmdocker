@@ -57,8 +57,8 @@ pages:
   image: hosttoday/ht-docker-node:npmci
   stage: pages
   script:
-    - npmci command yarn global add npmpage
-    - npmci command npmpage
+    - npmci command npm install -g @gitzone/tsdoc
+    - npmci command tsdoc
   only:
     - tags
   tags:
