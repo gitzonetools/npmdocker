@@ -1,6 +1,6 @@
 FROM hosttoday/ht-docker-node:npmci
-RUN yarn global add npmdocker
+RUN yarn global add @gitzone/tsdocker
 COPY ./ /workspace
 WORKDIR /workspace
 ENV CI=true
-CMD ["npmdocker","runinside"];
+CMD ["tsdocker","runinside"];
