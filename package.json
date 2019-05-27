@@ -35,7 +35,7 @@
   "devDependencies": {
     "@gitzone/tsbuild": "^2.1.11",
     "@gitzone/tsrun": "^1.2.6",
-    "@gitzone/tstest": "^1.0.21",
+    "@gitzone/tstest": "^1.0.22",
     "@pushrocks/tapbundle": "^3.0.9",
     "@types/node": "^12.0.2",
     "tslint": "^5.16.0",
@@ -53,7 +53,7 @@
     "@pushrocks/smartlog-source-ora": "^1.0.7",
     "@pushrocks/smartopen": "^1.0.8",
     "@pushrocks/smartpromise": "^3.0.2",
-    "@pushrocks/smartshell": "^2.0.17",
+    "@pushrocks/smartshell": "^2.0.20",
     "@pushrocks/smartstring": "^3.0.10",
     "@types/shelljs": "^0.8.5"
   }
