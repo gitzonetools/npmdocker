@@ -6,7 +6,7 @@ export interface IConfig {
   command: string;
   dockerSock: boolean;
   exitCode?: number;
-  keyValueObject: any[];
+  keyValueObject: {[key: string]: any};
 }
 
 const getQenvKeyValueObject = async () => {

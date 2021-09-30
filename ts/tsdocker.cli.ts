@@ -11,7 +11,7 @@ const tsdockerCli = new plugins.smartcli.Smartcli();
 
 export let run = () => {
   tsdockerCli.standardTask().subscribe(async argvArg => {
-    let configArg = await ConfigModule.run().then(DockerModule.run);
+    const configArg = await ConfigModule.run().then(DockerModule.run);
     if (configArg.exitCode === 0) {
       logger.log('success', 'container ended all right!');
     } else {
@@ -68,7 +68,7 @@ export let run = () => {
     });
     logger.log('ok', 'Starting speedtest');
     await smartshellInstance.exec(
-      `docker pull tianon/speedtest && docker run --rm tianon/speedtest`
+      `docker pull tianon/speedtest && docker run --rm tianon/speedtest --accept-license --accept-gdpr`
     );
   });
 
